@@ -7,9 +7,9 @@ permalink:        pretty
 relative_permalinks: true
 
 # Setup
-title:            Aaron
-tagline:          'Aaron Test Blog'
-description:      'Hi. I\'m Aaron. Here\'s some information about me.'
+title:            Aaron Shim
+tagline:          ''
+description:      "Hi. I'm Aaron. You can reach me at aaron [dot] shim [at] yale [dot] edu"
 url:              http://aaronshim.github.io
 baseurl:          /
 
@@ -18,6 +18,8 @@ author:
   url:            https://github.com/aaronshim
 
 paginate:         5
+#destination: _site/blog
+paginate_path: "blog/page:num/"
 
 # Custom vars
 version:          2.1.0
