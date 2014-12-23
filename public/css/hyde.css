@@ -99,6 +99,19 @@ a.sidebar-nav-item:focus {
   font-weight: bold;
 }
 
+/* Logos to use in sidebar */
+
+.logo {
+  border-radius: 50%;
+  border: 3px solid #FFF;
+  box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.3);
+}
+
+.sidebar-about .logo {
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /* Sticky sidebar
  *
  * Add the `sidebar-sticky` class to the sidebar's container to affix it the
@@ -247,4 +260,42 @@ a.sidebar-nav-item:focus {
 .theme-base-0f .content a,
 .theme-base-0f .related-posts li a:hover {
   color: #8f5536;
+}
+
+/* For fancier-looking posts */
+@media (min-width: 48em) {
+  .post-title {
+    font-size: 2.6rem; }
+}
+
+.post-overlay-header {
+  border-radius: 4px;
+  min-height: 190px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  margin-bottom: .5rem;
+}
+
+@media (min-width: 48em) {
+  .post-overlay-header {
+    min-height: 300px;
+  }
+}
+
+.post-overlay-header-title {
+  background-color: rgba(0, 0, 0, 0.35);
+  position: absolute;
+  bottom: 0;
+  padding: 1rem 1rem 0 1rem;
+  border-bottom-left-radius: 4px; }
+
+.post-overlay-header a {
+  color: #FFF;
+}
+.post-overlay-header a:hover, a:focus {
+  color: #CCC; }
+
+.post-overlay-header .post-date {
+  color: #DDDDDD;
 }

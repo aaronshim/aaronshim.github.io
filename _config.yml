@@ -17,6 +17,8 @@ author:
   name:           'Aaron Shim'
   url:            https://github.com/aaronshim
 
+logo: '/public/logo.png'
+
 paginate:         5
 #destination: _site/blog
 paginate_path: "blog/page:num/"
