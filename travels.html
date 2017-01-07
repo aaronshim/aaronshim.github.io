@@ -1,0 +1,39 @@
+---
+layout: page
+---
+
+<div id="imprint">
+    <p>
+        <span class="my-mini-heading">My Travels</span><br>
+        <ul>
+            {% for trip in site.data.travels %}
+            <li>
+                <p class="my-item" >{{ trip.destination }}<br>
+                    <span class="my-item-sub">{{ trip.date }}</span></p>
+            </li>
+            {% endfor %}
+        </ul>
+    </p>
+</div>
+
+<!-- for map -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.2/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.0.2/dist/leaflet.js"></script>
+
+<div id="map" style="height: 200px;"></div>
+
+<script type="text/javascript">
+    const coord = [47.643754, -122.127669]
+    const map = L.map('map').setView(coord, 13);
+
+    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    L.marker(coord).addTo(map);
+
+    // add all of the other destinations to the map
+    {% for trip in site.data.travels %}
+    L.marker({{ trip.gps }}).addTo(map)
+    {% endfor %}
+</script>
