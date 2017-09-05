@@ -1,65 +1,41 @@
-title: "Aaron Shim"
-description: "Coding & Other Things"
-about: "Trying to get by in this world."
-location: "Redmond, WA"
-email: aaron.k.shim@gmail.com
-baseurl: ""
+# Site settings
+title: Hi. I'm Aaron.
+description: Coding & Other Things
+url: 'https://shim.space'
+baseurl: ''
+# google_analytics: 'UA-XXXXXX-X'
+# disqus_shortname: 'your-disqus-name'
 
-url: "https://shim.space" # replace by your site's url
-github_username: aaronshim
-author: "Aaron Shim"
+author:
+  name: Aaron Shim
+  email: aaron.k.shim@gmail.com
+  github_username:  aaronshim
+  linkedin_username: aaron-shim-41a46221
 
-# google analytics tracking code, please change the value
-g_analytics: ""
+defaults:
+  -
+    scope:
+      path: ''
+      type: 'posts'
+    values:
+        layout: 'post'
 
-# add your disqus to enable comments
-disqus_shortname:
-
-# add your disqus to enable comments
-disqus_shortname:
-
-# language settings
-isolang: en
-close_btn: "Close"
-home_btn: "Home"
-projects_btn: "Projects"
-posts_btn: "Posts"
-imprint_btn: "Legal"
-about_btn: "About"
-travels_btn: "Travels"
-music_btn: "Music"
-name_badge: "an article by"
-rss_badge: "Subscribe feed!"
-
-# build settings
+# Build settings
+destination: _site
+paginate: 10
+permalink: /:year/:title/
 markdown: kramdown
 highlighter: rouge
 
+sass:
+    sass_dir: _sass
+    style: compressed
+
 kramdown:
+  # use Github Flavored Markdown
   input: GFM
+  # do not replace newlines by <br>s
   hard_wrap: false
-  auto_ids: true
-  footnote_nr: 1
-  entity_output: as_char
-  toc_levels: 1..6
-  smart_quotes: lsquo,rsquo,ldquo,rdquo
-  enable_coderay: false
-  syntax_highlighter: rouge
-  syntax_highlighter_opts:
-    tab_width: 4
 
-# third party gems
-gems:
-  - jekyll-paginate
-  - jekyll-gist
-  - jemoji
-
-whitelist:
-  - jekyll-paginate
-  - jekyll-gist
-  - jemoji
-
-# exclude files
-exclude:
-  - LICENSE
-  - README.md
+gems: ['jekyll-paginate']
+exclude: ['README.md', 'Gemfile', 'Gemfile.lock', 'screenshot.png']

@@ -1,36 +1,36 @@
 - destination: Guangdong, China
   date: November 2016
-  gps: "[22.27981 , 114.1618]"
+  gps: "[22.27981, 114.1618]"
 - destination: Helsinki, Finland
   date: August 2016
-  gps: 
+  gps: "[60.16985569999999, 24.93837910000002]"
 - destination: Addis Ababa, Ethiopia
   date: July/August 2016
-  gps: 
+  gps: "[8.9806034, 38.75776050000002]"
 - destination: Seoul, Korea
   date: July 2016
-  gps: 
+  gps: "[37.566535, 126.97796919999996]"
 - destination: Singapore & Kuala Lumpur, Malaysia
   date: July 2016
-  gps: 
+  gps: "[1.352083, 103.81983600000001]"
 - destination: Lisbon, Portugal
   date: June 2016
-  gps: 
+  gps: "[38.7222524, -9.139336599999979]"
 - destination: Xinjiang, China
   date: May/June 2016
-  gps: 
+  gps: "[39.47040000000001, 75.98975500000006]"
 - destination: Ecuador
   date: May 2016
-  gps: 
+  gps: "[-0.8480555999999999, -78.91194439999998]"
 - destination: Shanghai, China
   date: March 2016
-  gps: 
+  gps: "[31.2303904, 121.47370209999997]"
 - destination: Japan
   date: March 2016
-  gps: 
+  gps: "[35.5448529, 139.76722440000003]"
 - destination: Peru
   date: November 2015
-  gps: 
+  gps: "[-13.53195, -71.96746259999998]"
 - destination: Mexico City, Mexico
   date: November 2015
-  gps: 
+  gps: "[19.4301915, -99.13887]"
