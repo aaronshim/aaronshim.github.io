@@ -1,14 +1,45 @@
-# light material jekyll theme
-a lightweight jekyll blogging theme, perfect for your personal page.
+# jekyll-uno
 
-# [DEMO](http://himsel.me/material-theme)
+Jekyll-Uno - a minimal, responsive theme for Jekyll based on the [Uno](https://github.com/daleanthony/Uno) theme for Ghost.
 
-### Use this Jekyll theme
-[Read the Article about it!](http://himsel.me/material-theme/2016/09/19/use-my-jekyll-theme.html)  
-If you are too busy to read these few lines, then please do this:  
-- fork repo  
-- change the site's url and other values in `_config.yml`  
+> :warning:
+  This theme requires ruby and rubygems installed
 
-####License
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)  
-This theme is distributed under the MIT License.
+### Features
+
+* Clean layout
+* Resposive layout
+* Pagination
+* Syntax highlighting
+* Social links
+* Tags listing page
+* Categories listing page
+* Google Analytics integration
+* Disqus integration
+
+---
+
+### Install and Test
+
+1. Download or clone repo `git clone git@github.com:joshgerdes/jekyll-uno.git`
+2. Enter the folder: `cd jekyll-uno/`
+3. If you don't have bundler installed: `gem install bundler`
+3. Install Ruby gems: `bundle install`
+4. Start Jekyll server: `bundle exec jekyll serve --watch`
+
+Access via: [http://localhost:4000/jekyll-uno/](http://localhost:4000/jekyll-uno/)
+
+---
+
+### Demo and Download
+
+[Demo](http://joshgerdes.com/jekyll-uno/)
+[Download](https://github.com/joshgerdes/jekyll-uno/archive/master.zip)
+
+![jekyll-uno - free Jekyll theme](/screenshot.png)
+
+---
+
+### Copyright and license
+
+It is under [the MIT license](/LICENSE).

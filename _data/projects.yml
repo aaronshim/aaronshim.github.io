@@ -1,6 +1,10 @@
-- name: BoolaMarket
-  link: "#"
-  description: "Campus marketplace for Yalies looking to buy and sell items within the student body, with a focus on promoting sustainability"
-- name: NYO China
-  link: "https://www.nyochina.org"
-  description: "National Youth Orchestra for students in China, with a concert tour scheduled for summer of 2017. Served as tech onsultant and lead developer for the program's online presence"
+- title: Project Title
+  image: /images/mountains.jpg
+  icons: [git]
+  description: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+  link: //www.google.com
+- title: Project Title
+  image: /images/skate.jpg
+  icons: [git, ruby, rails]
+  description: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+  link: //www.google.com
