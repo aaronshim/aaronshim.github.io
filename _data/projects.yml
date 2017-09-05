@@ -1,10 +1,14 @@
-- title: Project Title
-  image: /images/mountains.jpg
-  icons: [git]
-  description: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-  link: //www.google.com
-- title: Project Title
-  image: /images/skate.jpg
-  icons: [git, ruby, rails]
-  description: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-  link: //www.google.com
+- title: BoolaBooks
+  image: /images/boolabooks.jpg
+  icons: [ruby, rails, bootstrap, sass, elm]
+  description: BoolaBooks is a textbook-trading platform designed to match sellers with buyers on campuses. It allows users to upload their inventory of books, specify which courses the books are used in, search books for sale, and automatically be notified of books that may be of interest.
+  link: //boolabooks.com
+- title: Overtones
+  icons: [elm, javascript, webpack]
+  description: Overtones is a javascript-based synthesizer for creating new tonal colors through <a href="https://en.wikipedia.org/wiki/Additive_synthesis">additive synthesis</a> (stacking different overtones on top of each other). It was built on top of the Web Audio API using Elm.
+  link: //shim.space/overtones
+- title: NYO-China
+  image: /images/nyochina.jpg
+  icons: [react, wordpress, ruby, rails, docker]
+  description: This project included the informational page, the publicity blog, the application submission portal for prospective students, the judging portal for faculty, and hosting all of these services mentioned above.
+  link: //nyochina.org

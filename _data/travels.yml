@@ -1,3 +1,18 @@
+- destination: St. Louis, MO
+  date: August 2017
+  gps: "[38.6920498, -90.39156270000001]"
+- destination: Beijing, China
+  date: July 2017
+  gps: "[39.909802, 116.41452099999992]"
+- destination: Alaskan Panhandle
+  date: July 2017
+  gps: "[59.45345440000001, -135.3193941]"
+- destination: Denver, CO
+  date: April 2017
+  gps: "[39.7442672, -104.99854299999998]"
+- destination: Tijuana, Mexico
+  date: January 2017
+  gps: "[32.5282869, -116.99210670000002]"
 - destination: Guangdong, China
   date: November 2016
   gps: "[22.27981, 114.1618]"
@@ -8,7 +23,7 @@
   date: July/August 2016
   gps: "[8.9806034, 38.75776050000002]"
 - destination: Seoul, Korea
-  date: July 2016
+  date: March 2016, July 2016, July 2017
   gps: "[37.566535, 126.97796919999996]"
 - destination: Singapore & Kuala Lumpur, Malaysia
   date: July 2016
@@ -23,7 +38,7 @@
   date: May 2016
   gps: "[-0.8480555999999999, -78.91194439999998]"
 - destination: Shanghai, China
-  date: March 2016
+  date: March 2016, July 2017
   gps: "[31.2303904, 121.47370209999997]"
 - destination: Japan
   date: March 2016

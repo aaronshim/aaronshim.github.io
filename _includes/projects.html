@@ -2,13 +2,15 @@
 
 {% for project in site.data.projects %}
 <div class="project-row">
+    {% if project.image %}
     <img alt="mountains" src="{{ project.image | prepend: site.baseurl }}" class="project-image" />
+    {% endif %}
     <h3>{{ project.title }}</h3>
     <div class="project-icons-row">
         {% for icon in project.icons %}
-            <div class="project-icon">
-            {% include_relative {{ icon | prepend: '/images/svg/' | append: '.svg' }} %}
-            </div>
+        <div class="project-icon" title="{{ icon | capitalize }}">
+        {% include_relative {{ icon | prepend: '/images/svg/' | append: '.svg' }} %}
+        </div>
         {% endfor %}
     </div>
     <p>{{ project.description }}</p>
