@@ -1,14 +1,23 @@
 <!DOCTYPE html>
 <html lang="en" data-critters-container>
-<head>
+<head><meta http-equiv="Content-Security-Policy" content="script-src 'strict-dynamic' 'sha256-ugIqsF1k+xGeDWGh/kd54UR7R0AsbjKEAeAj/OPqAR0=' https: 'unsafe-inline';object-src 'none';base-uri 'self';">
   <meta charset="utf-8">
   <title>Tour of Heroes</title>
-  <base href="/angular/angular-toh-unchanged/">
+  <base href="/angular/angular-toh-csp/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 <style>*{font-family:Arial,Helvetica,sans-serif}body{padding:.5rem;max-width:1000px;margin:auto}@media (min-width: 600px){body{padding:2rem}}body{color:#333;font-family:Cambria,Georgia,serif}
 </style><link rel="stylesheet" href="styles-LOGPSQOO.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="styles-LOGPSQOO.css"></noscript></head>
 <body>
   <app-root></app-root>
-<script src="polyfills-6EAL64PA.js" type="module"></script><script src="main-BAOMYPCQ.js" type="module"></script></body>
+<script>
+    var scripts = [['polyfills-6EAL64PA.js','module', undefined],['main-BAOMYPCQ.js','module', undefined]];
+    scripts.forEach(function(scriptUrl) {
+      var s = document.createElement('script');
+      s.src = scriptUrl[0];
+      s.type = scriptUrl[1];
+      s.async = !!scriptUrl[2]; // preserve execution order.
+      document.body.appendChild(s);
+    });
+    </script></body>
 </html>
