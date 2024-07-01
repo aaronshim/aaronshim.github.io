@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1719782440316,
+  "timestamp": 1719850789021,
   "index": "/angular/angular-movies-unchanged/index.html",
   "assetGroups": [
     {
@@ -131,8 +131,8 @@
     "/angular/angular-movies-unchanged/common.js": "f872a39a2dec0896abba7f38b24e0b5b3425d05c",
     "/angular/angular-movies-unchanged/default-projects_movies_src_app_shared_cdk_image_image-tag_transform_ts-projects_movies_src_a-4d8953.js": "b9b6d8bd34ef8ac818d466fa70650e5812ee84c4",
     "/angular/angular-movies-unchanged/favicon.ico": "541c0c2117af303eb592aaec8860bfb4bda69f1c",
-    "/angular/angular-movies-unchanged/index.html": "ace2085da4bcb261a052c5ff8c87490d01bb15b0",
-    "/angular/angular-movies-unchanged/main.js": "322a0e4b314c6f822a56cb0ab509101adb89a68f",
+    "/angular/angular-movies-unchanged/index.html": "0bb7c65ef584bdf75b3aff0489ccfec483c6d640",
+    "/angular/angular-movies-unchanged/main.js": "61fe6e8d470e5b33233c6ba6633cd98a4be52679",
     "/angular/angular-movies-unchanged/manifest.webmanifest": "c7c98dad0968fd3c821db564a967f4cab461f962",
     "/angular/angular-movies-unchanged/projects_movies_src_app_app-shell_account-menu_account-menu_component_ts.js": "0225f2f482504d2740d938843a221a93b6da8717",
     "/angular/angular-movies-unchanged/projects_movies_src_app_pages_account-feature_account-feature-page_routes_ts.js": "431209005ef495393a52c84e4d6113e15c610116",
