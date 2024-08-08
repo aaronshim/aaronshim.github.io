@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" data-critters-container=""><head><meta http-equiv="Content-Security-Policy" content="script-src 'strict-dynamic' 'sha256-VjxPGzdWcBFuumh2UGnU5b9caDp15SAf060tbxZetpI=' https: 'unsafe-inline';object-src 'none';base-uri 'self';"><base href="/angular/angular-movies-csp-ordered/">
+    <meta charset="utf-8">
+    <title>HubMovies</title>
+    <meta name="description" content="A movies manager build with Angular - no idea which movie to watch ? find it here">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="apple-touch-icon" href="/assets/icons/light-apple-touch-icon.png&quot;">
+    <link rel="preconnect" href="https://image.tmdb.org/" crossorigin="">
+    <link rel="preconnect" href="https://api.themoviedb.org/" crossorigin="">
+    <link rel="manifest" href="manifest.webmanifest">
+    <meta name="theme-color" content="#1976d2">
+  <style>@charset "UTF-8";html{box-sizing:border-box}*,*:before,*:after{box-sizing:inherit;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}html,body{width:100%;height:100%;background-color:var(--palette-background-default)}*{margin:0;padding:0}@media screen and (prefers-reduced-motion: reduce){html{-webkit-scroll-behavior:auto;-moz-scroll-behavior:auto;-ms-scroll-behavior:auto;scroll-behavior:auto}}:root{--theme-borderRadius-sm:3px;--theme-borderRadius-m:4px;--theme-borderRadius-circle:50%}:root{--theme-aspectRatio-2-3:2/3;--theme-aspectRatio-16-9:16/9;--theme-aspectRatio-4-3:4/3}:root{--theme-appbar-zIndex:1100;--theme-backdrop-zIndex:1101;--theme-drawer-zIndex:1200;--theme-tooptip-zIndex:1300}:root{--duration:.5s;--timing:ease;--theme-anim-duration-short:.25s;--theme-anim-duration-standard:.3s;--theme-anim-duration-leavingScreen:195ms;--theme-anim-easing-easeInOut:cubic-bezier(.4, 0, .2, 1);--theme-anim-easing-easeOut:cubic-bezier(.4, 0, .2, 1);--theme-anim-easing-easeIn:cubic-bezier(.4, 0, .2, 1);--theme-anim-easing-sharp:cubic-bezier(.4, 0, .2, 1)}:root{--theme-shadow-1:0px 2px 1px -1px rgba(0, 0, 0, .2), 0px 1px 1px 0px rgba(0, 0, 0, .14), 0px 1px 3px 0px rgba(0, 0, 0, .12);--theme-shadow-dropdown:rgb(0 0 0 / 20%) 0px 2px 1px -1px, rgb(0 0 0 / 14%) 0px 1px 1px 0px, rgb(0 0 0 / 12%) 0px 1px 3px 0px;--theme-shadow-16:0px 8px 10px -5px rgba(0, 0, 0, .2), 0px 16px 24px 2px rgba(0, 0, 0, .14), 0px 6px 30px 5px rgba(0, 0, 0, .12)}body.light{--palette-background-default:#fafafa;--palette-text-primary:rgba(0, 0, 0, .87);--palette-text-secondary:rgba(0, 0, 0, .54);--palette-text-disabled:rgba(0, 0, 0, .38);--palette-divider:rgba(0, 0, 0, .12);--palette-action-active:rgba(0, 0, 0, .54);--palette-action-hover:rgba(0, 0, 0, .04);--palette-action-hover-opacity:.04;--palette-action-selected:rgba(0, 0, 0, .08);--palette-action-disabled:rgba(0, 0, 0, .26);--palette-action-disabled-background:rgba(0, 0, 0, .12);--palette-background-paper:#fff;--palette-primary-main:#14b8a2;--palette-primary-main-rgb:20, 184, 162;--palette-primary-dark:#0e8071;--palette-primary-light:#43c6b4;--palette-primary-contrast-text:rgba(0, 0, 0, .87);--palette-secondary-main:#b80040;--palette-secondary-main-rgb:184, 0, 64;--palette-secondary-dark:#80002c;--palette-secondary-light:#c63366;--palette-secondary-contrast-text:#fff;--palette-warning-main:#b5b800;--palette-warning-dark:#575800;--palette-warning-light:#c3c633;--palette-toggle-light-light:#ffb74d;--palette-custom-lightBlue:#add8e6;--palette-warning-contrast-text:rgba(0, 0, 0, .87);--background-blend-gradient:linear-gradient( rgba(255, 255, 255, 0) 68%, rgb(255, 255, 255) 100% )}:root{--text-sm:1.38rem;--text-md:1.5rem;--text-lg:1.75rem;--text-xl:2rem}html{font-size:62.5%;box-sizing:border-box}body{font-family:Montserrat,sans-serif;font-weight:400;line-height:1.6}@media only screen and (max-width: 1500px){html{font-size:57.5%}}@media only screen and (max-width: 1300px){html{font-size:55%}}body{color:var(--palette-text-primary);background-color:var(--palette-background-default);transition:color var(--duration) var(--timing),background-color var(--duration) var(--timing)}</style><link rel="stylesheet" href="styles.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="styles.css"></noscript></head>
+
+  <body class="light">
+    <app-root>
+      <div id="loading-csr" styles="
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+      ">
+        <img width="192" height="192" priority="high" src="assets/icons/android-chrome-192x192.png" alt="logo">
+        <p>HubMovies</p>
+      </div>
+    </app-root>
+    <noscript>Please enable JavaScript to continue using this application.
+    </noscript>
+  <script>
+    var scripts = [['runtime.js','module', false],['main.js','module', false]];
+    scripts.forEach(function(scriptUrl) {
+      var s = document.createElement('script');
+      s.src = scriptUrl[0];
+      s.type = scriptUrl[1];
+      s.async = !!scriptUrl[2]; // preserve execution order.
+      document.body.appendChild(s);
+    });
+    </script>
+</body></html>
