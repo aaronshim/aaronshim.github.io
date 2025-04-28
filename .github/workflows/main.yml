@@ -45,8 +45,9 @@ jobs:
       # --- NEW STEP: Generate SLSA Attestation ---
       # This action should run after the build step that produces the artifact.
       # It captures information about the build process and outputs an attestation.
+      # Using the correct action name and a known version (v0.1.0 is a common starting point)
       - name: Generate SLSA Attestation
-        uses: slsa-framework/github-actions-build@v2
+        uses: slsa-framework/slsa-github-generated-build@v0.1.0
         with:
           # The artifact-path should point to the directory containing the build output.
           # This helps link the attestation to the specific files produced.
