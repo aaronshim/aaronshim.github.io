@@ -7,11 +7,13 @@ on:
       - main # Ensure this is your default branch for deployments
 
 # Grant permissions for the GITHUB_TOKEN
-# This is required for actions/deploy-pages and the SLSA attestation action
+# This is required for actions/deploy-pages and the attestation action
 permissions:
   contents: read # Allow checkout
   pages: write # Allow writing to the gh-pages branch (for deployment)
-  id-token: write # Required for the actions/deploy-pages and SLSA attestation action
+  id-token: write # Required for the actions/deploy-pages and attestation action
+  # The actions/attest-build-provenance action requires the 'attestations: write' permission
+  attestations: write
 
 jobs:
   build-nix:
@@ -45,21 +47,20 @@ jobs:
       # --- NEW STEP: Generate SLSA Attestation ---
       # This action should run after the build step that produces the artifact.
       # It captures information about the build process and outputs an attestation.
-      # Using the correct action name and a known version (v0.1.0 is a common starting point)
+      # Using the correct official GitHub action for attestation.
       - name: Generate SLSA Attestation
-        uses: slsa-framework/slsa-github-generated-build@v0.1.0
+        uses: actions/attest-build-provenance@v2
         with:
-          # The artifact-path should point to the directory containing the build output.
-          # This helps link the attestation to the specific files produced.
-          # The action will automatically detect the artifact if uploaded next.
-          artifact-path: ./result/dist
-          # You can specify other options here if needed,
-          # but artifact-path is usually sufficient for basic attestation.
+          # The subject-path should point to the directory or file(s) containing the build output.
+          # This is the artifact(s) you are attesting to.
+          subject-path: ./result/dist
+          # The action will automatically handle signing using the OIDC token
+          # and uploading the attestation to the GitHub Attestation API.
 
       # --- EXISTING STEP: Upload the built site as a pages artifact ---
       # This action uploads the build output directory for GitHub Pages deployment.
-      # The SLSA action above will generate an attestation covering the creation
-      # of the contents in this directory.
+      # The attestation generated above covers the creation of the contents
+      # in this directory.
       - name: Upload pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
