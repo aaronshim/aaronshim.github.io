@@ -13,6 +13,7 @@ It uses [Hakyll](https://jaspervdj.be/hakyll/) + [Nix](https://nixos.org).
 
 - Updated the Github Actions workflows to use `actions/deploy-pages@v4` instead
   (and changed Pages deployment settings to allow this).
+- Added `actions/attest-build-provenance@v2` for SLSA attestations of the build.
 
 ## Previous Documentation
 
