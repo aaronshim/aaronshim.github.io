@@ -7,11 +7,11 @@ on:
       - main # Ensure this is your default branch for deployments
 
 # Grant permissions for the GITHUB_TOKEN
-# This is required for actions/deploy-pages
+# This is required for actions/deploy-pages and the SLSA attestation action
 permissions:
   contents: read # Allow checkout
-  pages: write # Allow writing to the gh-pages branch
-  id-token: write # Required for the actions/deploy-pages action
+  pages: write # Allow writing to the gh-pages branch (for deployment)
+  id-token: write # Required for the actions/deploy-pages and SLSA attestation action
 
 jobs:
   build-nix:
@@ -42,12 +42,26 @@ jobs:
       # like ./result/dist based on your current setup.
       - run: nix build --accept-flake-config
 
-      # --- MODIFIED STEP ---
-      # Upload the built site as a pages artifact
+      # --- NEW STEP: Generate SLSA Attestation ---
+      # This action should run after the build step that produces the artifact.
+      # It captures information about the build process and outputs an attestation.
+      - name: Generate SLSA Attestation
+        uses: slsa-framework/github-actions-build@v2
+        with:
+          # The artifact-path should point to the directory containing the build output.
+          # This helps link the attestation to the specific files produced.
+          # The action will automatically detect the artifact if uploaded next.
+          artifact-path: ./result/dist
+          # You can specify other options here if needed,
+          # but artifact-path is usually sufficient for basic attestation.
+
+      # --- EXISTING STEP: Upload the built site as a pages artifact ---
+      # This action uploads the build output directory for GitHub Pages deployment.
+      # The SLSA action above will generate an attestation covering the creation
+      # of the contents in this directory.
       - name: Upload pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # This path should point to the directory containing your built static site files
           path: ./result/dist
 
   # --- MODIFIED JOB ---
