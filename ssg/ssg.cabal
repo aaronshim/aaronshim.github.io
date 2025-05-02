@@ -43,8 +43,8 @@ executable hakyll-site
         -- Depend on the internal library defined above (Changed)
         ssg, 
         -- Dependencies specific to the executable
-        hakyll            == 4.16.*,
-        pandoc            >= 2.11,
+        hakyll            >= 4.16,
+        pandoc            >= 3,
         filepath          >= 1.0,
         slugger           >= 0.1.0.2,
     ghc-options:     -O2

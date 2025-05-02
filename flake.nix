@@ -23,10 +23,11 @@
           (final: prev: {
             hakyllProject = final.haskell-nix.project' {
               src = ./ssg;
-              compiler-nix-name = "ghc948";
+              compiler-nix-name = "ghc910";
               modules = [{ doHaddock = false; }];
               shell.buildInputs = [
                 hakyll-site
+                final.git
               ];
               shell.tools = {
                 cabal = "latest";
