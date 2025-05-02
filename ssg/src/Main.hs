@@ -3,9 +3,10 @@
 import Control.Monad (forM_)
 import Data.List (isPrefixOf, isSuffixOf)
 import Data.Maybe (fromMaybe)
-import Hakyll
 import qualified Data.Text as T
 import qualified Data.Text.Slugger as Slugger
+import Hakyll
+import qualified StrictCsp
 import System.FilePath (takeFileName)
 import Text.Pandoc
   ( Extension (Ext_fenced_code_attributes, Ext_footnotes, Ext_gfm_auto_identifiers, Ext_implicit_header_references, Ext_smart),
@@ -26,7 +27,7 @@ mySiteName :: String
 mySiteName = "My Site Name"
 
 mySiteRoot :: String
-mySiteRoot = "https://my-site.com"
+mySiteRoot = "https:/aaronshim.github.io"
 
 myFeedTitle :: String
 myFeedTitle = "My Feed Title"
@@ -50,19 +51,19 @@ myFeedRoot = mySiteRoot
 config :: Configuration
 config =
   defaultConfiguration
-    { destinationDirectory = "dist"
-    , ignoreFile = ignoreFile'
-    , previewHost = "127.0.0.1"
-    , previewPort = 8000
-    , providerDirectory = "src"
-    , storeDirectory = "ssg/_cache"
-    , tmpDirectory = "ssg/_tmp"
+    { destinationDirectory = "dist",
+      ignoreFile = ignoreFile',
+      previewHost = "127.0.0.1",
+      previewPort = 8000,
+      providerDirectory = "src",
+      storeDirectory = "ssg/_cache",
+      tmpDirectory = "ssg/_tmp"
     }
   where
     ignoreFile' path
-      | "."    `isPrefixOf` fileName = False
-      | "#"    `isPrefixOf` fileName = True
-      | "~"    `isSuffixOf` fileName = True
+      | "." `isPrefixOf` fileName = False
+      | "#" `isPrefixOf` fileName = True
+      | "~" `isSuffixOf` fileName = True
       | ".swp" `isSuffixOf` fileName = True
       | otherwise = False
       where
@@ -72,78 +73,84 @@ config =
 -- BUILD
 
 main :: IO ()
-main = hakyllWith config $ do
-  forM_
-    [ "CNAME"
-    , "favicon.ico"
-    , "robots.txt"
-    , "_config.yml"
-    , "images/*"
-    , "js/*"
-    , "fonts/*"
-    ]
-    $ \f -> match f $ do
+main = do
+  putStrLn "Hello, world!"
+  -- putStrLn $ Csp.myCspHelperFunction "hi"
+
+  hakyllWith config $ do
+    forM_
+      [ "CNAME",
+        "favicon.ico",
+        "robots.txt",
+        "_config.yml",
+        "images/*",
+        "js/*",
+        "fonts/*"
+      ]
+      $ \f -> match f $ do
+        route idRoute
+        compile copyFileCompiler
+
+    match "css/*" $ do
       route idRoute
-      compile copyFileCompiler
+      compile compressCssCompiler
 
-  match "css/*" $ do
-    route idRoute
-    compile compressCssCompiler
+    match "posts/*" $ do
+      let ctx = constField "type" "article" <> postCtx
 
-  match "posts/*" $ do
-    let ctx = constField "type" "article" <> postCtx
+      route $ metadataRoute titleRoute
+      compile $
+        pandocCompilerCustom
+          >>= loadAndApplyTemplate "templates/post.html" ctx
+          >>= saveSnapshot "content"
+          >>= loadAndApplyTemplate "templates/default.html" ctx
+          >>= applyDefaultCsp
 
-    route $ metadataRoute titleRoute
-    compile $
-      pandocCompilerCustom
-        >>= loadAndApplyTemplate "templates/post.html" ctx
-        >>= saveSnapshot "content"
-        >>= loadAndApplyTemplate "templates/default.html" ctx
+    match "index.html" $ do
+      route idRoute
+      compile $ do
+        posts <- recentFirst =<< loadAll "posts/*"
 
-  match "index.html" $ do
-    route idRoute
-    compile $ do
-      posts <- recentFirst =<< loadAll "posts/*"
+        let indexCtx =
+              listField "posts" postCtx (return posts)
+                <> constField "root" mySiteRoot
+                <> constField "feedTitle" myFeedTitle
+                <> constField "siteName" mySiteName
+                <> defaultContext
 
-      let indexCtx =
-            listField "posts" postCtx (return posts)
-              <> constField "root" mySiteRoot
-              <> constField "feedTitle" myFeedTitle
-              <> constField "siteName" mySiteName
-              <> defaultContext
+        getResourceBody
+          >>= applyAsTemplate indexCtx
+          >>= loadAndApplyTemplate "templates/default.html" indexCtx
+          >>= applyDefaultCsp
 
-      getResourceBody
-        >>= applyAsTemplate indexCtx
-        >>= loadAndApplyTemplate "templates/default.html" indexCtx
+    match "templates/*" $
+      compile templateBodyCompiler
 
-  match "templates/*" $
-    compile templateBodyCompiler
+    create ["sitemap.xml"] $ do
+      route idRoute
+      compile $ do
+        posts <- recentFirst =<< loadAll "posts/*"
 
-  create ["sitemap.xml"] $ do
-    route idRoute
-    compile $ do
-      posts <- recentFirst =<< loadAll "posts/*"
+        let pages = posts
+            sitemapCtx =
+              constField "root" mySiteRoot
+                <> constField "siteName" mySiteName
+                <> listField "pages" postCtx (return pages)
 
-      let pages = posts
-          sitemapCtx =
-            constField "root" mySiteRoot
-              <> constField "siteName" mySiteName
-              <> listField "pages" postCtx (return pages)
+        makeItem ("" :: String)
+          >>= loadAndApplyTemplate "templates/sitemap.xml" sitemapCtx
 
-      makeItem ("" :: String)
-        >>= loadAndApplyTemplate "templates/sitemap.xml" sitemapCtx
+    create ["rss.xml"] $ do
+      route idRoute
+      compile (feedCompiler renderRss)
 
-  create ["rss.xml"] $ do
-    route idRoute
-    compile (feedCompiler renderRss)
+    create ["atom.xml"] $ do
+      route idRoute
+      compile (feedCompiler renderAtom)
 
-  create ["atom.xml"] $ do
-    route idRoute
-    compile (feedCompiler renderAtom)
-
-  create ["css/code.css"] $ do
-    route idRoute
-    compile (makeStyle pandocHighlightStyle)
+    create ["css/code.css"] $ do
+      route idRoute
+      compile (makeStyle pandocHighlightStyle)
 
 --------------------------------------------------------------------------------
 -- COMPILER HELPERS
@@ -151,6 +158,13 @@ main = hakyllWith config $ do
 makeStyle :: Style -> Compiler (Item String)
 makeStyle =
   makeItem . compressCss . styleToCss
+
+applyHtmlTextTransform :: (T.Text -> T.Text) -> Item String -> Compiler (Item String)
+applyHtmlTextTransform textTransform item =
+  return $ fmap (T.unpack . textTransform . T.pack) item
+
+applyDefaultCsp :: Item String -> Compiler (Item String)
+applyDefaultCsp = applyHtmlTextTransform (StrictCsp.applyStrictCspWithDefaultOptions)
 
 --------------------------------------------------------------------------------
 -- CONTEXT
@@ -203,11 +217,11 @@ pandocExtensionsCustom :: Extensions
 pandocExtensionsCustom =
   githubMarkdownExtensions
     <> extensionsFromList
-      [ Ext_fenced_code_attributes
-      , Ext_gfm_auto_identifiers
-      , Ext_implicit_header_references
-      , Ext_smart
-      , Ext_footnotes
+      [ Ext_fenced_code_attributes,
+        Ext_gfm_auto_identifiers,
+        Ext_implicit_header_references,
+        Ext_smart,
+        Ext_footnotes
       ]
 
 pandocReaderOpts :: ReaderOptions
@@ -219,8 +233,8 @@ pandocReaderOpts =
 pandocWriterOpts :: WriterOptions
 pandocWriterOpts =
   defaultHakyllWriterOptions
-    { writerExtensions = pandocExtensionsCustom
-    , writerHighlightStyle = Just pandocHighlightStyle
+    { writerExtensions = pandocExtensionsCustom,
+      writerHighlightStyle = Just pandocHighlightStyle
     }
 
 pandocHighlightStyle :: Style
@@ -245,11 +259,11 @@ feedCompiler renderer =
 feedConfiguration :: FeedConfiguration
 feedConfiguration =
   FeedConfiguration
-    { feedTitle = myFeedTitle
-    , feedDescription = myFeedDescription
-    , feedAuthorName = myFeedAuthorName
-    , feedAuthorEmail = myFeedAuthorEmail
-    , feedRoot = myFeedRoot
+    { feedTitle = myFeedTitle,
+      feedDescription = myFeedDescription,
+      feedAuthorName = myFeedAuthorName,
+      feedAuthorEmail = myFeedAuthorEmail,
+      feedRoot = myFeedRoot
     }
 
 --------------------------------------------------------------------------------

@@ -45,6 +45,7 @@
         flake = pkgs.hakyllProject.flake {};
 
         executable = "ssg:exe:hakyll-site";
+        testCompName = "ssg:test:csp-test";
 
         hakyll-site = flake.packages.${executable};
 
@@ -87,6 +88,14 @@
         packages = {
           inherit hakyll-site website;
           default = website;
+        };
+
+        checks = {
+           # Map a name (e.g., "csp-test") to the test suite package derivation
+           # This uses the pattern established in your flake for accessing packages
+           csp-test = flake.packages.${testCompName};
+           # If flake.packages doesn't contain the test suite directly, access via pkgs.hakyllProject
+           # csp-test = pkgs.hakyllProject.packages.${testCompName}; # Alternative access
         };
       }
     );
