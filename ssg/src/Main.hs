@@ -11,7 +11,7 @@ import Data.Time.Format (defaultTimeLocale, formatTime, iso8601DateFormat)
 import Data.Time.LocalTime (getCurrentTimeZone, utcToLocalTime)
 import Hakyll
 import qualified StrictCsp
-import System.FilePath (takeFileName)
+import System.FilePath (takeFileName, (</>))
 import Text.Pandoc
   ( Extension (Ext_fenced_code_attributes, Ext_footnotes, Ext_gfm_auto_identifiers, Ext_implicit_header_references, Ext_smart),
     Extensions,
@@ -101,7 +101,7 @@ main = do
     match "posts/*" $ do
       let ctx = constField "type" "article" <> postCtx
 
-      route $ metadataRoute titleRoute
+      route $ metadataRoute postRoute
       compile $
         pandocCompilerCustom
           >>= loadAndApplyTemplate "templates/post.html" ctx
@@ -112,8 +112,10 @@ main = do
     match "index.html" $ do
       route idRoute
       compile $ do
-        posts <- recentFirst =<< loadAll "posts/*"
-
+        -- Load and sort all posts
+        allPostsSorted <- recentFirst =<< loadAll "posts/*"
+        -- Take only the 5 most recent
+        let posts = take 5 allPostsSorted
         let indexCtx =
               listField "posts" postCtx (return posts)
                 <> constField "root" mySiteRoot
@@ -296,6 +298,9 @@ fileNameFromTitle :: Metadata -> FilePath
 fileNameFromTitle =
   T.unpack . (`T.append` ".html") . Slugger.toSlug . T.pack . safeTitle
 
-titleRoute :: Metadata -> Routes
-titleRoute =
-  constRoute . fileNameFromTitle
+-- | For posts, the generated filename is based on the title and lives under \/posts\/
+postRoute :: Metadata -> Routes
+postRoute meta =
+  let baseFilename = fileNameFromTitle meta -- e.g., "hello-world.html"
+      finalPath = "posts" </> baseFilename -- e.g., "posts/hello-world.html"
+   in constRoute finalPath -- Create route for the full path
