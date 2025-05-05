@@ -39,34 +39,30 @@ jobs:
           name: hakyll-nix-template
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
-      # Build your Hakyll site
-      # Make sure this command outputs the static site to a known directory,
-      # like ./result/dist based on your current setup.
-      - run: nix build --accept-flake-config
+      # --- NEW STEP: Run Flake Checks ---
+      # This runs all checks defined in the 'checks' output of your flake.nix
+      # Includes --accept-flake-config because your flake uses allow-import-from-derivation
+      - name: Run Flake Checks
+        run: nix flake check --accept-flake-config
 
-      # --- NEW STEP: Generate SLSA Attestation ---
-      # This action should run after the build step that produces the artifact.
-      # It captures information about the build process and outputs an attestation.
-      # Using the correct official GitHub action for attestation.
+      # Build your Hakyll site executable and website derivation
+      # This builds the 'default' package (website) and its dependencies (hakyll-site)
+      - name: Build Site
+        run: nix build --accept-flake-config
+
+      # --- Generate SLSA Attestation ---
+      # Attests to the creation of the ./result/dist directory contents
       - name: Generate SLSA Attestation
         uses: actions/attest-build-provenance@v2
         with:
-          # The subject-path should point to the directory or file(s) containing the build output.
-          # This is the artifact(s) you are attesting to.
-          subject-path: ./result/dist
-          # The action will automatically handle signing using the OIDC token
-          # and uploading the attestation to the GitHub Attestation API.
+          subject-path: ./result/dist # Path to the built website artifact
 
-      # --- EXISTING STEP: Upload the built site as a pages artifact ---
-      # This action uploads the build output directory for GitHub Pages deployment.
-      # The attestation generated above covers the creation of the contents
-      # in this directory.
+      # --- Upload the built site as a pages artifact ---
       - name: Upload pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./result/dist
+          path: ./result/dist # Path to the built website artifact
 
-  # --- MODIFIED JOB ---
   deploy:
     # Deploy only on pushes to the main branch
     if: github.ref == 'refs/heads/main'
@@ -77,9 +73,6 @@ jobs:
     needs: [build-nix] # Depends on the build job completing successfully
 
     steps:
-      # --- REMOVED STEP: Download artifact is not needed with actions/deploy-pages ---
-
-      # --- MODIFIED STEP ---
       # Deploy the uploaded artifact to GitHub Pages
       - name: Deploy to GitHub Pages
         id: deployment
