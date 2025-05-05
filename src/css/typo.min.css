@@ -277,11 +277,6 @@ li {
 a {
   text-decoration: underline;
 }
-input {
-  .dark & {
-    color-scheme: dark;
-  }
-}
 .copy-code-button {
   background-color: var(--background);
   font-family: var(--font-mono);
@@ -581,12 +576,6 @@ figure {
     height: auto;
   }
 }
-.dark .img-light {
-  display: none !important;
-}
-.light .img-dark {
-  display: none !important;
-}
 .img-small div {
   display: flex;
   align-items: center;
@@ -691,17 +680,68 @@ blockquote p {
   margin-left: 1rem;
   margin-right: 1rem;
 }
+
+/* Default (Light) Theme Variables */
 :root {
-  --content-primary: #000000; /* Changed to black */
-  --content-secondary: #33302e;
-  --background: #fff1e5; /* Changed to your desired background */
-  --code-background: #ffffff; /* Changed to white for contrast against new bg */
-  --code-border: rgb(229, 229, 229); /* Kept original light gray border */
+  /* --- Dimensions & Layout --- */
+  --main-width: 780px;
+  --main-padding: 1.4em;
+  /* ... other layout vars ... */
+  --code-border-radius: 10px;
+  --footer-height: 3rem;
+  --content-height: calc(100vh - var(--footer-height));
+
+  /* --- Fonts --- */
+  --font-body: "Literata", Georgia, Cambria, "Noto Serif", "Droif Serif",
+    ui-serif, serif;
+  --font-mono: "Monaspace", ui-monospace, monospace;
+  /* ... other font size vars ... */
+
+  /* --- Light Theme Colors (Your Modifications) --- */
+  --content-primary: #000000; /* Black text */
+  --content-secondary: #33302e; /* Dark gray secondary text (Adjust if needed) */
+  --background: #fff1e5; /* Your light background */
+  --code-background: #ffffff; /* White code background */
+  --code-border: rgb(229, 229, 229); /* Light gray code border */
+  /* Add any other base/light variables here */
 }
-.dark {
-  --content-primary: rgb(218, 218, 218);
-  --content-secondary: rgb(140, 140, 140);
-  --background: rgb(20, 20, 20);
-  --code-background: rgb(30, 30, 30);
-  --code-border: rgb(50, 50, 50);
+
+/* Default image visibility (Light Mode shows .img-light, hides .img-dark) */
+.img-dark {
+  display: none !important;
+}
+.img-light {
+  /* Use display:block or display:inline depending on image type */
+  display: block !important;
+}
+
+/* --- Dark Theme Overrides --- */
+@media (prefers-color-scheme: dark) {
+  /* Redefine variables for dark mode */
+  :root {
+    /* Targeting :root ensures variables override globally */
+    --content-primary: rgb(218, 218, 218);
+    --content-secondary: rgb(140, 140, 140);
+    --background: rgb(20, 20, 20);
+    --code-background: rgb(30, 30, 30);
+    --code-border: rgb(50, 50, 50);
+    /* Redefine any other variables needed for dark theme */
+  }
+
+  /* Dark mode specific image visibility */
+  .img-light {
+    display: none !important;
+  }
+  .img-dark {
+    display: block !important; /* Or inline */
+  }
+
+  /* Dark mode specific input styling */
+  input {
+    color-scheme: dark;
+  }
+
+  /* Add any other rules that need specific overrides ONLY in dark mode */
+  /* For example, if links need a different color not covered by variables: */
+  /* a { color: #some-dark-mode-link-color; } */
 }
