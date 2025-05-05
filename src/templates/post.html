@@ -1,8 +1,7 @@
 <div class="autonumber">
   <article>
     <header class="single-intro-container">
-      <h1 class="single-title"><a href="$url$">$title$</a></h1>
-
+      <h1 class="single-title">$title$</h1>
       $if(description)$
       <p class="single-summary">$description$</p>
       $endif$
@@ -13,7 +12,11 @@
 
       <div
         class="single-metadata"
-        style="font-size: 0.9em; color: var(--text-light)"
+        style="
+          font-size: 0.9em;
+          color: var(--text-secondary);
+          margin-top: 0.5em;
+        "
       >
         $if(updated)$
         <span>(Updated: $updated$)</span><br />
