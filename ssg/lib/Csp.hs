@@ -23,8 +23,6 @@ module Csp
   )
 where
 
--- Explicitly import length
-
 -- Useful for structured search/insertion
 -- Import Algorithms qualified
 import qualified Crypto.Hash as Hash -- Import main module qualified
@@ -41,7 +39,7 @@ import Data.Aeson
 import Data.ByteArray (convert) -- Import the convert function
 import qualified Data.ByteString.Base64 as B64
 import Data.Char (toLower)
-import Data.List (foldl')
+import Data.List (nub) -- Added nub
 import Data.Maybe (fromMaybe, mapMaybe)
 import Data.Text (Text)
 import qualified Data.Text as T
@@ -155,29 +153,31 @@ hashAllInlineScripts html =
 
             -- Found the end of the script tag
             TagClose "script" ->
-              let newHash = hashInlineScript accumulator -- Hash the accumulated content
+              -- Hash the accumulated content (including whitespace)
+              let newHash = hashInlineScript accumulator
                in (Nothing, newHash : hashes) -- Add hash to list, exit 'InsideScript' state
 
             -- Found something else inside script (e.g., comment, nested tag - ignored by this simple state machine)
-            -- CSP hashing generally includes comments, so a more complex parser might be needed
-            -- for perfect accuracy if comments within <script> are expected.
             _ -> (Just accumulator, hashes) -- Stay inside, keep accumulating (or ignore tag)
 
 -- | Generates the Content Security Policy string based on options and script hashes.
 getStrictCsp :: Maybe [Text] -> CspOptions -> Text
 getStrictCsp maybeHashes options =
-  let hashes = fromMaybe [] maybeHashes
+  -- Apply nub here to ensure hashes are unique before using them
+  let uniqueHashes = nub $ fromMaybe [] maybeHashes -- Use nub on the input hashes
       basePolicy =
-        [ ("script-src", "'strict-dynamic'" : hashes),
+        -- Use uniqueHashes when constructing the directive
+        [ ("script-src", "'strict-dynamic'" : uniqueHashes),
           ("object-src", ["'none'"]),
-          ("base-uri", ["'self'"]) -- Use 'self' instead of 'none' if relative URLs are needed
+          ("base-uri", ["'self'"])
         ]
 
       policyWithFallbacks =
         if enableBrowserFallbacks options
           then
             let scriptSrcUpdate =
-                  if not (null hashes)
+                  -- Check uniqueHashes here as well if the logic depends on whether *any* hashes exist
+                  if not (null uniqueHashes)
                     then ["https:", "'unsafe-inline'"]
                     else ["https:"]
              in updateDirective "script-src" (++ scriptSrcUpdate) basePolicy
@@ -261,17 +261,18 @@ processTagsForRemoval tags = reverse $ fst $ foldl' step ([], 0) tags
 
 -- | Refactors sourced scripts (<script src="...">) into a single inline loader script.
 -- Returns the modified HTML Text.
-refactorSourcedScriptsForHashBasedCsp :: Text -> Text
-refactorSourcedScriptsForHashBasedCsp html =
+-- Takes CspOptions now to pass to createLoaderScript.
+refactorSourcedScriptsForHashBasedCsp :: CspOptions -> Text -> Text
+refactorSourcedScriptsForHashBasedCsp options html =
   let allTags = parseTags html
       -- Extract info needed for the loader script *before* removing tags
       sourcedScriptsForInfo = filter isSourcedScript allTags
       scriptInfos :: [ScriptInfo]
       scriptInfos = mapMaybe extractScriptInfo sourcedScriptsForInfo
 
-      -- Create the loader script content if needed
+      -- Create the loader script content if needed, passing options
       maybeLoaderScriptContent :: Maybe Text
-      maybeLoaderScriptContent = createLoaderScript scriptInfos
+      maybeLoaderScriptContent = createLoaderScript scriptInfos options -- Pass options here
    in case maybeLoaderScriptContent of
         Nothing -> html -- No sourced scripts, return original HTML
         Just loaderContent ->
@@ -310,24 +311,50 @@ isBodyCloseTag (TagClose "body") = True
 isBodyCloseTag _ = False
 
 -- | Creates the JavaScript loader script content.
-createLoaderScript :: [ScriptInfo] -> Maybe Text
-createLoaderScript [] = Nothing
-createLoaderScript scriptInfoList =
-  Just $
-    T.concat
-      [ "\nvar scripts = ",
-        TL.toStrict $ TLE.decodeUtf8 $ encode scriptInfoList, -- Encode script info list to JSON
-        ";\n",
-        "scripts.forEach(function(scriptInfo) {\n",
-        "  var s = document.createElement('script');\n",
-        "  s.src = scriptInfo.src;\n",
-        "  if (scriptInfo.type) {\n",
-        "    s.type = scriptInfo.type;\n",
-        "  }\n",
-        "  s.async = false; // preserve execution order.\n", -- Corrected JS comment syntax
-        "  document.body.appendChild(s);\n",
-        "});\n"
-      ]
+-- Takes CspOptions to handle Trusted Types.
+createLoaderScript :: [ScriptInfo] -> CspOptions -> Maybe Text
+createLoaderScript [] _ = Nothing -- No scripts, no options needed
+createLoaderScript scriptInfoList options =
+  let scriptInfoJson = TL.toStrict $ TLE.decodeUtf8 $ encode scriptInfoList
+   in Just $
+        if enableTrustedTypes options
+          then -- Trusted Types enabled: Define policy and use it
+            T.concat
+              [ "\n",
+                "// Define a Trusted Types policy (basic pass-through)\n",
+                "var policy = trustedTypes.createPolicy('script-loader', {\n",
+                "  createScriptURL: function(url) { return url; }\n",
+                "});\n",
+                "var scripts = ",
+                scriptInfoJson,
+                ";\n",
+                "scripts.forEach(function(scriptInfo) {\n",
+                "  var s = document.createElement('script');\n",
+                -- Use the policy to set the src
+                "  s.src = policy.createScriptURL(scriptInfo.src);\n",
+                "  if (scriptInfo.type) {\n",
+                "    s.type = scriptInfo.type;\n",
+                "  }\n",
+                "  s.async = false; // preserve execution order.\n",
+                "  document.body.appendChild(s);\n",
+                "});\n"
+              ]
+          else -- Trusted Types disabled: Standard script loading
+            T.concat
+              [ "\nvar scripts = ",
+                scriptInfoJson,
+                ";\n",
+                "scripts.forEach(function(scriptInfo) {\n",
+                "  var s = document.createElement('script');\n",
+                -- Set src directly
+                "  s.src = scriptInfo.src;\n",
+                "  if (scriptInfo.type) {\n",
+                "    s.type = scriptInfo.type;\n",
+                "  }\n",
+                "  s.async = false; // preserve execution order.\n",
+                "  document.body.appendChild(s);\n",
+                "});\n"
+              ]
 
 -- | Utility to serialize tags back to Text.
 serializeTags :: [Tag Text] -> Text

@@ -2,6 +2,7 @@
 
 import Control.Monad (forM_)
 import Control.Monad.IO.Class (liftIO)
+import Csp (CspOptions (CspOptions, enableBrowserFallbacks, enableTrustedTypes, enableUnsafeEval))
 import Data.List (isPrefixOf, isSuffixOf)
 import Data.Maybe (fromMaybe)
 import qualified Data.Text as T
@@ -184,8 +185,16 @@ applyHtmlTextTransform :: (T.Text -> T.Text) -> Item String -> Compiler (Item St
 applyHtmlTextTransform textTransform item =
   return $ fmap (T.unpack . textTransform . T.pack) item
 
+cspSettings :: CspOptions
+cspSettings =
+  CspOptions
+    { enableBrowserFallbacks = True,
+      enableTrustedTypes = True,
+      enableUnsafeEval = False
+    }
+
 applyDefaultCsp :: Item String -> Compiler (Item String)
-applyDefaultCsp = applyHtmlTextTransform (StrictCsp.applyStrictCspWithDefaultOptions)
+applyDefaultCsp = applyHtmlTextTransform (StrictCsp.applyStrictCsp cspSettings)
 
 --------------------------------------------------------------------------------
 -- CONTEXT
