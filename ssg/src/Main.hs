@@ -109,25 +109,40 @@ main = do
           >>= loadAndApplyTemplate "templates/default.html" ctx
           >>= applyDefaultCsp
 
+    -- Helper function encapsulating the common logic for index-like pages
+    let buildIndexLikePage ::
+          ([Item String] -> [Item String]) -> -- Function to select posts
+          Compiler (Item String) -- Resulting compiler action
+        buildIndexLikePage selectPosts = do
+          -- Load and sort all posts
+          allPostsSorted <- recentFirst =<< loadAll "posts/*"
+          -- Apply the selection function
+          let postsToUse = selectPosts allPostsSorted
+
+          -- Define the context using the selected posts
+          -- It can access postCtx, mySiteRoot, etc. from the outer scope
+          let ctx =
+                listField "posts" postCtx (return postsToUse)
+                  <> constField "root" mySiteRoot
+                  <> constField "feedTitle" myFeedTitle
+                  <> constField "siteName" mySiteName
+                  <> copyrightCtx
+                  <> defaultContext
+
+          -- Run the common compilation pipeline
+          getResourceBody
+            >>= applyAsTemplate ctx
+            >>= loadAndApplyTemplate "templates/default.html" ctx
+            >>= applyDefaultCsp
+
     match "index.html" $ do
       route idRoute
-      compile $ do
-        -- Load and sort all posts
-        allPostsSorted <- recentFirst =<< loadAll "posts/*"
-        -- Take only the 5 most recent
-        let posts = take 5 allPostsSorted
-        let indexCtx =
-              listField "posts" postCtx (return posts)
-                <> constField "root" mySiteRoot
-                <> constField "feedTitle" myFeedTitle
-                <> constField "siteName" mySiteName
-                <> copyrightCtx
-                <> defaultContext
+      -- Not every post should be included in the index page.
+      compile $ buildIndexLikePage (take 5)
 
-        getResourceBody
-          >>= applyAsTemplate indexCtx
-          >>= loadAndApplyTemplate "templates/default.html" indexCtx
-          >>= applyDefaultCsp
+    match "posts.html" $ do
+      route $ constRoute "posts/index.html"
+      compile $ buildIndexLikePage id
 
     match "templates/*" $
       compile templateBodyCompiler
