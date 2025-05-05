@@ -47,6 +47,7 @@ executable hakyll-site
         pandoc            >= 3,
         filepath          >= 1.0,
         slugger           >= 0.1.0.2,
+        time              >= 1.12,
     ghc-options:     -O2
                      -threaded
                      -rtsopts

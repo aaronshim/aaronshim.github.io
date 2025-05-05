@@ -1,7 +1,7 @@
 ---
 author: "Mi nombre"
 authorTwitter: "@MiNombre"
-desc: "Me anuncio al mundo"
+description: "Me anuncio al mundo"
 image: "./images/waiheke-stony-batter.jpg"
 keywords: "hola, anuncio"
 lang: "es"

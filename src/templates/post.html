@@ -1,15 +1,59 @@
-<main>
+<div class="autonumber">
   <article>
-    <header>
-      <h1>
-        <a href=".$url$">$title$</a>
-      </h1>
-      <div>
-        $date$ $if(updated)$(updated: $updated$)$endif$
+    <header class="single-intro-container">
+      <h1 class="single-title"><a href="$url$">$title$</a></h1>
+
+      $if(description)$
+      <p class="single-summary">$description$</p>
+      $endif$
+
+      <p class="single-readtime">
+        <time datetime="$datetime$">$date$</time>
+      </p>
+
+      <div
+        class="single-metadata"
+        style="font-size: 0.9em; color: var(--text-light)"
+      >
+        $if(updated)$
+        <span>(Updated: $updated$)</span><br />
+        $endif$ $if(tags)$
+        <div class="tags">Tags: $tags$</div>
+        $endif$
       </div>
     </header>
-    <section>
-      $body$
-    </section>
+
+    <div class="single-content">$body$</div>
   </article>
-</main>
+
+  <div class="single-pagination">
+    <hr />
+    <div class="flexnowrap">
+      <div class="single-pagination-prev">
+        $if(previousPostUrl)$
+        <div class="single-pagination-container-prev">
+          <div class="single-pagination-text">←</div>
+          <div class="single-pagination-text">
+            <a href="$previousPostUrl$">$previousPostTitle$</a>
+          </div>
+        </div>
+        $endif$
+      </div>
+      <div class="single-pagination-next">
+        $if(nextPostUrl)$
+        <div class="single-pagination-container-next">
+          <div class="single-pagination-text">
+            <a href="$nextPostUrl$">$nextPostTitle$</a>
+          </div>
+          <div class="single-pagination-text">→</div>
+        </div>
+        $endif$
+      </div>
+    </div>
+    <hr />
+  </div>
+
+  <div class="back-to-top">
+    <a href="#top">back to top</a>
+  </div>
+</div>

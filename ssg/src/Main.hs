@@ -1,10 +1,14 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 import Control.Monad (forM_)
+import Control.Monad.IO.Class (liftIO)
 import Data.List (isPrefixOf, isSuffixOf)
 import Data.Maybe (fromMaybe)
 import qualified Data.Text as T
 import qualified Data.Text.Slugger as Slugger
+import Data.Time.Clock (getCurrentTime)
+import Data.Time.Format (defaultTimeLocale, formatTime, iso8601DateFormat)
+import Data.Time.LocalTime (getCurrentTimeZone, utcToLocalTime)
 import Hakyll
 import qualified StrictCsp
 import System.FilePath (takeFileName)
@@ -36,7 +40,7 @@ myFeedDescription :: String
 myFeedDescription = "My Site Description"
 
 myFeedAuthorName :: String
-myFeedAuthorName = "My Name"
+myFeedAuthorName = "Aaron Shim"
 
 myFeedAuthorEmail :: String
 myFeedAuthorEmail = "me@myemail.com"
@@ -75,7 +79,6 @@ config =
 main :: IO ()
 main = do
   putStrLn "Hello, world!"
-  -- putStrLn $ Csp.myCspHelperFunction "hi"
 
   hakyllWith config $ do
     forM_
@@ -116,6 +119,7 @@ main = do
                 <> constField "root" mySiteRoot
                 <> constField "feedTitle" myFeedTitle
                 <> constField "siteName" mySiteName
+                <> copyrightCtx
                 <> defaultContext
 
         getResourceBody
@@ -180,12 +184,31 @@ postCtx =
   constField "root" mySiteRoot
     <> constField "feedTitle" myFeedTitle
     <> constField "siteName" mySiteName
-    <> dateField "date" "%Y-%m-%d"
+    <> field "description" (fmap (fromMaybe "" . lookupString "description") . getMetadata . itemIdentifier)
+    <> dateField "date" "%d %b %Y"
+    <> dateField "datetime" (iso8601DateFormat Nothing)
+    <> copyrightCtx
     <> defaultContext
 
 titleCtx :: Context String
 titleCtx =
   field "title" updatedTitle
+
+-- | Year that the site is built, uses unsafe IO.
+yearCtx :: Context String
+yearCtx = field "year" $ \_ -> unsafeCompiler $ do
+  -- Use \_ to explicitly ignore the Item argument
+  currentTime <- liftIO getCurrentTime
+  timeZone <- liftIO getCurrentTimeZone
+  let localTime = utcToLocalTime timeZone currentTime
+  let currentYear = formatTime defaultTimeLocale "%Y" localTime
+  return currentYear
+
+-- | Copyright information -- name and year.
+copyrightCtx :: Context String
+copyrightCtx =
+  constField "authorName" myFeedAuthorName
+    <> yearCtx
 
 --------------------------------------------------------------------------------
 -- TITLE HELPERS
