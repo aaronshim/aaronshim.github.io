@@ -17,7 +17,7 @@
   inputs.flake-utils.url = "github:numtide/flake-utils";
 
   outputs = { self, nixpkgs, flake-utils, haskellNix }:
-    flake-utils.lib.eachDefaultSystem (system:
+    flake-utils.lib.eachSystem [ "x86_64-linux" ] (system:
       let
         overlays = [ haskellNix.overlay
           (final: prev: {
@@ -92,11 +92,15 @@
         };
 
         checks = {
-           # Map a name (e.g., "csp-test") to the test suite package derivation
-           # This uses the pattern established in your flake for accessing packages
-           csp-test = flake.packages.${testCompName};
-           # If flake.packages doesn't contain the test suite directly, access via pkgs.hakyllProject
-           # csp-test = pkgs.hakyllProject.packages.${testCompName}; # Alternative access
+           # Run the actual test suite, not just build it
+           csp-test = pkgs.runCommand "csp-test-runner" {
+             buildInputs = [ flake.packages.${testCompName} ];
+           } ''
+             echo "Running CSP tests..."
+             ${flake.packages.${testCompName}}/bin/csp-test
+             echo "Tests completed successfully"
+             touch $out
+           '';
         };
       }
     );

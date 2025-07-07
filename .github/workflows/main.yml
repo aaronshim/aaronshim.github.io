@@ -39,15 +39,12 @@ jobs:
           name: hakyll-nix-template
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
-      # --- NEW STEP: Run Flake Checks ---
-      # This runs all checks defined in the 'checks' output of your flake.nix
-      # Includes --accept-flake-config because your flake uses allow-import-from-derivation
-      - name: Run Flake Checks
+      # Run tests and build site
+      # This runs all checks (including tests) and builds the site
+      - name: Run tests
         run: nix flake check --accept-flake-config
-
-      # Build your Hakyll site executable and website derivation
-      # This builds the 'default' package (website) and its dependencies (hakyll-site)
-      - name: Build Site
+      
+      - name: Build site
         run: nix build --accept-flake-config
 
       # --- Generate SLSA Attestation ---
