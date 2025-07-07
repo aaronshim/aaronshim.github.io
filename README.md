@@ -1,5 +1,26 @@
 # Static Site
 
+## 🚨 Important Setup - haskell.nix Binary Cache
+
+**This step is critical for local development!** Without the haskell.nix binary cache, Nix will attempt to build GHC from source, requiring 13GB+ disk space and hours of compilation.
+
+📖 **Follow the official setup guide**: [haskell.nix Binary Cache Configuration](https://input-output-hk.github.io/haskell.nix/tutorials/getting-started.html#setting-up-the-binary-cache)
+
+This configures pre-built GHC packages that make builds fast and practical for local development.
+
+## 🧪 Development Commands
+
+For **macOS** users:
+```bash
+nix flake check --accept-flake-config    # Run tests
+```
+
+For **Linux** users, you can also use:
+```bash  
+nix build .#checks.x86_64-linux.csp-test --accept-flake-config    # Run tests
+nix flake check --accept-flake-config                             # Run tests (alternative)
+```
+
 ## Origins
 
 Started off with [a template](https://github.com/rpearce/hakyll-nix-template)
