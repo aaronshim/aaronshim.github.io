@@ -79,8 +79,6 @@ spec = do
       let sampleHtml = "<html><head><title>Test</title></head><body><p>Hello</p><script>alert('inline');</script><script src=\"external.js\"></script></body></html>"
       let sampleHtmlNoHead = "<html><body><p>Hello</p><script>alert('inline');</script><script src=\"external.js\"></script></body></html>"
       let sampleHtmlNoBodyEnd = "<html><head></head><body><p>Hello</p><script>alert('inline');</script><script src=\"external.js\"></script>"
-      -- Define defaultOpts for refactor function
-      let defaultOpts = defaultCspOptions
 
       describe "hashAllInlineScripts" $ do
         it "finds and hashes the inline script" $
@@ -104,15 +102,14 @@ spec = do
                  let expected = "<meta http-equiv=\"Content-Security-Policy\" content=\"default-src 'self'\"><html><body><p>Hello</p><script>alert('inline');</script><script src=\"external.js\"></script></body></html>"
                  in addMetaTag csp sampleHtmlNoHead `shouldBe` expected
 
-      describe "refactorSourcedScriptsForHashBasedCsp" $ do
-        it "removes sourced script and adds loader script before </body>" $
-          let result = refactorSourcedScriptsForHashBasedCsp defaultOpts sampleHtml
-              -- Updated expected JSON to include "type":null
-              expectedLoader = createLoaderScript [ScriptInfo "external.js" Nothing] defaultOpts
-           in do
-                result `shouldSatisfy` T.isInfixOf (fromMaybe T.empty expectedLoader)
-                result `shouldSatisfy` (not . T.isInfixOf "<script src=\"external.js\">")
-                result `shouldSatisfy` T.isInfixOf ("</script></body></html>")
+        describe "refactorSourcedScriptsForHashBasedCsp" $ do
+            it "removes sourced script and adds loader script before </body>" $
+                let result = refactorSourcedScriptsForHashBasedCsp defaultCspOptions sampleHtml
+                    expectedLoader = createLoaderScript [ScriptInfo "external.js" Nothing] defaultCspOptions
+                in do
+                    result `shouldSatisfy` T.isInfixOf (fromMaybe "" expectedLoader) -- Check loader content exists
+                    result `shouldSatisfy` (not . T.isInfixOf "<script src=\"external.js\">") -- Check original removed
+                    result `shouldSatisfy` T.isInfixOf ("</script></body></html>") -- Check loader is before </body>
 
             it "appends loader script if no </body>" $
                  let result = refactorSourcedScriptsForHashBasedCsp defaultCspOptions sampleHtmlNoBodyEnd
