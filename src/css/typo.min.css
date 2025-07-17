@@ -715,18 +715,75 @@ blockquote p {
   display: block !important;
 }
 
-/* --- Dark Theme Overrides --- */
+/* --- Theme System --- */
+:root {
+  /* Light theme colors */
+  --light-content-primary: #000000;
+  --light-content-secondary: #33302e;
+  --light-background: #fff1e5;
+  --light-code-background: #ffffff;
+  --light-code-border: rgb(229, 229, 229);
+  
+  /* Dark theme colors */
+  --dark-content-primary: rgb(218, 218, 218);
+  --dark-content-secondary: rgb(140, 140, 140);
+  --dark-background: rgb(20, 20, 20);
+  --dark-code-background: rgb(30, 30, 30);
+  --dark-code-border: rgb(50, 50, 50);
+}
+
+/* Apply light theme variables */
+body.light {
+  --content-primary: var(--light-content-primary);
+  --content-secondary: var(--light-content-secondary);
+  --background: var(--light-background);
+  --code-background: var(--light-code-background);
+  --code-border: var(--light-code-border);
+  --theme: var(--background);
+}
+
+/* Apply dark theme variables */
+body.dark {
+  --content-primary: var(--dark-content-primary);
+  --content-secondary: var(--dark-content-secondary);
+  --background: var(--dark-background);
+  --code-background: var(--dark-code-background);
+  --code-border: var(--dark-code-border);
+  --theme: var(--background);
+}
+
+/* Auto mode respects system preference */
 @media (prefers-color-scheme: dark) {
-  /* Redefine variables for dark mode */
-  :root {
-    /* Targeting :root ensures variables override globally */
-    --content-primary: rgb(218, 218, 218);
-    --content-secondary: rgb(140, 140, 140);
-    --background: rgb(20, 20, 20);
-    --code-background: rgb(30, 30, 30);
-    --code-border: rgb(50, 50, 50);
-    /* Redefine any other variables needed for dark theme */
+  body.auto {
+    --content-primary: var(--dark-content-primary);
+    --content-secondary: var(--dark-content-secondary);
+    --background: var(--dark-background);
+    --code-background: var(--dark-code-background);
+    --code-border: var(--dark-code-border);
+    --theme: var(--background);
   }
+}
+
+/* Theme toggle button styling */
+#theme-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1em;
+  padding: 0.2em;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+  color: var(--content-secondary);
+}
+
+#theme-toggle:hover {
+  background-color: var(--code-background);
+}
+
+#theme-toggle:focus {
+  outline: 2px solid var(--content-secondary);
+  outline-offset: 2px;
+}
 
   /* Dark mode specific image visibility */
   .img-light {
