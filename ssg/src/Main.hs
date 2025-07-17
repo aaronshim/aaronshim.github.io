@@ -10,6 +10,7 @@ import qualified Data.Text.Slugger as Slugger
 import Data.Time.Clock (getCurrentTime)
 import Data.Time.Format (defaultTimeLocale, formatTime, iso8601DateFormat)
 import Data.Time.LocalTime (getCurrentTimeZone, utcToLocalTime)
+import GhcVersionResolver (ghcVersionContext)
 import Hakyll
 import qualified StrictCsp
 import System.FilePath (takeFileName, (</>))
@@ -128,6 +129,7 @@ main = do
                   <> constField "feedTitle" myFeedTitle
                   <> constField "siteName" mySiteName
                   <> copyrightCtx
+                  <> ghcVersionContext
                   <> defaultContext
 
           -- Run the common compilation pipeline
@@ -214,6 +216,7 @@ postCtx =
     <> dateField "date" "%d %b %Y"
     <> dateField "datetime" (iso8601DateFormat Nothing)
     <> copyrightCtx
+    <> ghcVersionContext
     <> defaultContext
 
 titleCtx :: Context String

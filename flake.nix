@@ -47,6 +47,7 @@
 
         executable = "ssg:exe:hakyll-site";
         testCompName = "ssg:test:csp-test";
+        ghcTestCompName = "ssg:test:ghc-version-resolver-test";
 
         hakyll-site = flake.packages.${executable};
 
@@ -92,13 +93,59 @@
         };
 
         checks = {
-           # Run the actual test suite, not just build it
+           # Individual test suites (run in parallel by nix)
            csp-test = pkgs.runCommand "csp-test-runner" {
              buildInputs = [ flake.packages.${testCompName} ];
            } ''
              echo "Running CSP tests..."
              ${flake.packages.${testCompName}}/bin/csp-test
-             echo "Tests completed successfully"
+             echo "CSP tests completed successfully"
+             touch $out
+           '';
+           
+           ghc-version-resolver-test = pkgs.runCommand "ghc-version-resolver-test-runner" {
+             buildInputs = [ flake.packages.${ghcTestCompName} ];
+           } ''
+             echo "Running GHC version resolver tests..."
+             ${flake.packages.${ghcTestCompName}}/bin/ghc-version-resolver-test
+             echo "GHC version resolver tests completed successfully"
+             touch $out
+           '';
+           
+           # Combined test that runs all and continues on failure
+           all-tests = pkgs.runCommand "all-tests-runner" {
+             buildInputs = [ 
+               flake.packages.${testCompName} 
+               flake.packages.${ghcTestCompName}
+             ];
+           } ''
+             echo "Running all test suites with failure tolerance..."
+             
+             EXIT_CODE=0
+             
+             echo "Running CSP tests..."
+             if ${flake.packages.${testCompName}}/bin/csp-test; then
+               echo "✓ CSP tests completed successfully"
+             else
+               echo "✗ CSP tests failed"
+               EXIT_CODE=1
+             fi
+             
+             echo "Running GHC version resolver tests..."
+             if ${flake.packages.${ghcTestCompName}}/bin/ghc-version-resolver-test; then
+               echo "✓ GHC version resolver tests completed successfully"
+             else
+               echo "✗ GHC version resolver tests failed"
+               EXIT_CODE=1
+             fi
+             
+             if [ $EXIT_CODE -eq 0 ]; then
+               echo "✓ All tests completed successfully"
+             else
+               echo "✗ Some tests failed, but all were executed"
+               exit $EXIT_CODE
+             fi
+             
              touch $out
            '';
         };
