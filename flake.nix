@@ -42,6 +42,14 @@
           inherit overlays system;
           inherit (haskellNix) config;
         };
+        
+        # Get the GHC version from the actual compiler being used
+        # The project uses compiler-nix-name = "ghc910" but that maps to ghc9101 internally
+        hakyllProject = pkgs.hakyllProject;
+        ghcVersion = hakyllProject.pkg-set.config.ghc.package.version;
+        
+        # Get the nixpkgs revision from the haskellNix input
+        nixpkgsRev = haskellNix.inputs.nixpkgs-unstable.rev;
 
         flake = pkgs.hakyllProject.flake {};
 
@@ -69,7 +77,16 @@
             (pkgs.buildPlatform.libc == "glibc")
             "${pkgs.glibcLocales}/lib/locale/locale-archive";
 
+          # Pass GHC version information directly from Nix derivations
+          GHC_VERSION = "${ghcVersion}";
+          NIXPKGS_REV = "${nixpkgsRev}";
+
           buildPhase = ''
+            echo "Starting website build process..."
+            echo "GHC Version: $GHC_VERSION"
+            echo "Nixpkgs Revision: $NIXPKGS_REV"
+            
+            echo "Running hakyll-site build..."
             ${flake.packages.${executable}}/bin/hakyll-site build --verbose
           '';
 
@@ -80,6 +97,9 @@
         };
 
       in flake // rec {
+        # Expose GHC version for debugging
+        inherit ghcVersion;
+        
         apps = {
           default = flake-utils.lib.mkApp {
             drv = hakyll-site;
