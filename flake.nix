@@ -96,7 +96,7 @@
           '';
         };
 
-      in flake // (if system == "x86_64-linux" then { inherit ghcVersion; } else {}) // rec {
+      in (builtins.removeAttrs flake ["hydraJobs"]) // (if system == "x86_64-linux" then { inherit ghcVersion; } else {}) // rec {
         
         apps = {
           default = flake-utils.lib.mkApp {
@@ -110,8 +110,8 @@
           default = website;
         };
 
-        checks = pkgs.lib.optionalAttrs pkgs.stdenv.isLinux {
-           # Individual test suites (run in parallel by nix) - Linux only due to glibc dependencies
+        checks = {
+           # Individual test suites (run in parallel by nix) - system-specific
            csp-test = pkgs.runCommand "csp-test-runner" {
              buildInputs = [ flake.packages.${testCompName} ];
            } ''
