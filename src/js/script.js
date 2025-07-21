@@ -47,7 +47,17 @@
     // Add event listener for theme toggle
     const toggleButton = document.getElementById('theme-toggle');
     if (toggleButton) {
+      // Use both click and touchend for better mobile support
       toggleButton.addEventListener('click', cycleTheme);
+      toggleButton.addEventListener('touchend', function(e) {
+        e.preventDefault();
+        cycleTheme();
+      });
+      
+      // Prevent default behavior on touchstart to avoid double-firing
+      toggleButton.addEventListener('touchstart', function(e) {
+        e.preventDefault();
+      });
     }
   }
 

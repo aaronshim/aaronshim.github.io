@@ -52,3 +52,36 @@ p {
 pre.sourceCode {
   padding: 2rem 1.5rem;
 }
+
+/* Mobile-friendly theme toggle improvements */
+#theme-toggle {
+  /* Ensure adequate touch target size for mobile (minimum 44px) */
+  min-width: 44px;
+  min-height: 44px;
+  
+  /* Better mobile styling */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  
+  /* Ensure the button is always clickable */
+  position: relative;
+  z-index: 1;
+}
+
+/* iOS Safari specific fixes */
+#theme-toggle:active {
+  transform: scale(0.95);
+}
+
+/* Better mobile hover states */
+@media (hover: none) {
+  #theme-toggle:hover {
+    background-color: transparent;
+  }
+  
+  #theme-toggle:active {
+    background-color: var(--code-background, rgba(0,0,0,0.1));
+  }
+}
