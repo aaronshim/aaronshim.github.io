@@ -73,9 +73,9 @@
           #   https://github.com/NixOS/nix/issues/318#issuecomment-52986702
           #   https://github.com/MaxDaten/brutal-recipes/blob/source/default.nix#L24
           LANG = "en_US.UTF-8";
-          LOCALE_ARCHIVE = pkgs.lib.optionalString
-            (pkgs.buildPlatform.libc == "glibc")
-            "${pkgs.glibcLocales}/lib/locale/locale-archive";
+          LOCALE_ARCHIVE = if (pkgs.stdenv.isLinux && pkgs.buildPlatform.libc == "glibc")
+            then "${pkgs.glibcLocales}/lib/locale/locale-archive"
+            else "";
 
           # Pass GHC version information directly from Nix derivations
           GHC_VERSION = "${ghcVersion}";
@@ -96,9 +96,7 @@
           '';
         };
 
-      in flake // rec {
-        # Expose GHC version for debugging
-        inherit ghcVersion;
+      in flake // (if system == "x86_64-linux" then { inherit ghcVersion; } else {}) // rec {
         
         apps = {
           default = flake-utils.lib.mkApp {
@@ -112,8 +110,8 @@
           default = website;
         };
 
-        checks = {
-           # Individual test suites (run in parallel by nix)
+        checks = pkgs.lib.optionalAttrs pkgs.stdenv.isLinux {
+           # Individual test suites (run in parallel by nix) - Linux only due to glibc dependencies
            csp-test = pkgs.runCommand "csp-test-runner" {
              buildInputs = [ flake.packages.${testCompName} ];
            } ''
