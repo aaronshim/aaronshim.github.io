@@ -166,6 +166,60 @@
              
              touch $out
            '';
+           
+# End-to-end integration test using NixOS VM (Linux only)
+        } // pkgs.lib.optionalAttrs pkgs.stdenv.isLinux {
+           e2e-test = pkgs.testers.runNixOSTest {
+             name = "hakyll-site-e2e";
+             
+             nodes = {
+               server = { config, pkgs, ... }: {
+                 # Serve the built website
+                 services.nginx = {
+                   enable = true;
+                   virtualHosts."localhost" = {
+                     root = "${website}/dist";
+                     locations."/" = {
+                       index = "index.html";
+                     };
+                   };
+                 };
+                 
+                 # Install Deno and Chromium for testing
+                 environment.systemPackages = with pkgs; [ 
+                   deno
+                   chromium
+                 ];
+                 
+                 # Copy test files
+                 environment.etc."test/e2e/import_map.json".source = ./test/e2e/import_map.json;
+                 environment.etc."test/e2e/site.spec.ts".source = ./test/e2e/site.spec.ts;
+                 
+                 # Allow nginx to bind to port 80
+                 networking.firewall.allowedTCPPorts = [ 80 ];
+               };
+             };
+             
+             testScript = ''
+               # Start the server and wait for nginx
+               server.start()
+               server.wait_for_unit("nginx.service")
+               server.wait_for_open_port(80)
+               
+               # Wait a bit for nginx to be fully ready
+               server.sleep(2)
+               
+               # Test that nginx is serving our site
+               server.succeed("curl -f http://localhost/ > /tmp/index.html")
+               server.succeed("grep -i 'my site name' /tmp/index.html")
+               
+               # Test that basic functionality works
+               server.succeed("curl -f http://localhost/rss.xml")
+               server.succeed("curl -f http://localhost/sitemap.xml")
+               
+               # TODO: Add Deno e2e tests once VM has internet access
+             '';
+           };
         };
       }
     );
