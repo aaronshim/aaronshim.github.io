@@ -105,6 +105,7 @@ main = do
       compile $ do
         let ctx =
               constField "siteName" mySiteName
+                <> constField "root" mySiteRoot
                 <> copyrightCtx
                 <> ghcVersionContext
                 <> defaultContext

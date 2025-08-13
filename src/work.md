@@ -1,5 +1,7 @@
 ---
 title: "Work"
+description: "A summary of my professional work, talks, and publications."
+lang: "en-us"
 ---
 
 # Work
