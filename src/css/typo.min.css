@@ -243,6 +243,9 @@ h1 {
   margin-bottom: var(--h1-margin-bottom);
   font-size: var(--h1-font-size);
 }
+.name-highlight {
+  color: #00695c; /* A dark teal */
+}
 h2 {
   margin-top: var(--h2-margin-top);
   margin-bottom: var(--h2-margin-bottom);
@@ -723,7 +726,7 @@ blockquote p {
   --light-background: #fff1e5;
   --light-code-background: #ffffff;
   --light-code-border: rgb(229, 229, 229);
-  
+
   /* Dark theme colors */
   --dark-content-primary: rgb(218, 218, 218);
   --dark-content-secondary: rgb(140, 140, 140);
@@ -752,6 +755,17 @@ body.dark {
   --theme: var(--background);
 }
 
+/* Dark mode specific overrides for .dark theme */
+body.dark .img-light {
+  display: none !important;
+}
+body.dark .img-dark {
+  display: block !important;
+}
+body.dark input {
+  color-scheme: dark;
+}
+
 /* Auto mode respects system preference */
 @media (prefers-color-scheme: dark) {
   body.auto {
@@ -761,6 +775,17 @@ body.dark {
     --code-background: var(--dark-code-background);
     --code-border: var(--dark-code-border);
     --theme: var(--background);
+  }
+
+  /* Dark mode specific overrides for .auto theme */
+  body.auto .img-light {
+    display: none !important;
+  }
+  body.auto .img-dark {
+    display: block !important;
+  }
+  body.auto input {
+    color-scheme: dark;
   }
 }
 
@@ -783,22 +808,4 @@ body.dark {
 #theme-toggle:focus {
   outline: 2px solid var(--content-secondary);
   outline-offset: 2px;
-}
-
-  /* Dark mode specific image visibility */
-  .img-light {
-    display: none !important;
-  }
-  .img-dark {
-    display: block !important; /* Or inline */
-  }
-
-  /* Dark mode specific input styling */
-  input {
-    color-scheme: dark;
-  }
-
-  /* Add any other rules that need specific overrides ONLY in dark mode */
-  /* For example, if links need a different color not covered by variables: */
-  /* a { color: #some-dark-mode-link-color; } */
 }

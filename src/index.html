@@ -1,5 +1,5 @@
 ---
-title: "Home"
+title: "Hello!"
 description: "Welcome to my personal blog and website."
 lang: "en-us"
 ---
@@ -8,11 +8,29 @@ lang: "en-us"
   <script>
     console.log(document.domain);
   </script>
-  <h1>$title$</h1>
-  <p>$description$</p>
-  <hr />
-  <h2>Recent Posts</h2>
+  <h1>Hi, I'm <span class="name-highlight">Aaron</span>!</h1>
+  <p>
+    I am an optimistic technologist at heart, continually amazed by how
+    technology can empower people to build incredible things. My hope is to make
+    that creative joy accessible to as many people as possible.
+  </p>
+  <p>
+    By day, I <a href="/work">work</a> in cybersecurity-- specializing in secure
+    development practices, web frontend security, and securing AI and agentic
+    systems.
+  </p>
+  <p>
+    Outside of work, I play <a href="/music">music</a>, am an avid marathon
+    runner, and enjoy <a href="/projects">building things</a> that make my
+    hobbies more fun!
+  </p>
+  <p>
+    You can explore all of my writing in the <a href="/posts">post archive</a>.
+  </p>
 
+  <hr />
+
+  <h2>Recent Posts</h2>
   $if(posts)$ $for(posts)$
   <div class="post-line">
     <p class="line-date">$date$</p>

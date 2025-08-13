@@ -30,7 +30,7 @@ import Text.Pandoc.Highlighting (Style, breezeDark, styleToCss)
 -- PERSONALIZATION
 
 mySiteName :: String
-mySiteName = "My Site Name"
+mySiteName = "Aaron Shim"
 
 mySiteRoot :: String
 mySiteRoot = "https:/aaronshim.github.io"
@@ -99,6 +99,18 @@ main = do
     match "css/*" $ do
       route idRoute
       compile compressCssCompiler
+
+    match (fromList ["work.md", "music.md", "projects.md"]) $ do
+      route $ setExtension "html"
+      compile $ do
+        let ctx =
+              constField "siteName" mySiteName
+                <> copyrightCtx
+                <> ghcVersionContext
+                <> defaultContext
+        pandocCompilerCustom
+          >>= loadAndApplyTemplate "templates/default.html" ctx
+          >>= applyDefaultCsp
 
     match "posts/*" $ do
       let ctx = constField "type" "article" <> postCtx
