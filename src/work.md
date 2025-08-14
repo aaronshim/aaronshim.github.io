@@ -10,20 +10,25 @@ I've always been fascinated by the empowering nature of programming and its
 tools. I love creating the right building blocks that help more people
 experience the joy of building whatever they can imagine.
 
-I currently work at Google in the Security Engineering organization, where my
-focus is on web security (particularly on the frontend), the security of AI and
-agentic systems, and establishing safe development practices for an organization
-of hundreds of thousands of developers. My work centers on providing them with
-the right building blocks to develop secure-by-default software, freeing up
-their mindshare to focus on shipping amazing features to end users.
+I currently work at Google in the
+[Security Engineering](https://bughunters.google.com/) organization, where my
+focus is on **web security** (particularly on the frontend), the security of
+**AI and agentic systems**, and establishing **secure development** practices
+for an organization of hundreds of thousands of developers. My work centers on
+providing them with the right building blocks to develop secure-by-default
+software, freeing up their mindshare to focus on shipping amazing features to
+end users.
 
 Our team has a history of shipping large-scale web security remediations, like
-strict CSP and Trusted Types, which are designed to eliminate entire classes of
-bugs by following Secure by Design principles. We've applied these solutions
-across hundreds of web applications serving billions of users. Since then, much
-of my work has focused on taking the lessons from these efforts and sharing them
-with the wider open-source JavaScript community through conference talks,
-technical writing, and participation in industry-wide consortiums.
+[Strict CSP](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CSP#strict_csp)
+and
+[Trusted Types](https://developer.mozilla.org/en-US/docs/Web/API/Trusted_Types_API),
+which are designed to eliminate entire classes of bugs by following Secure by
+Design principles. We've applied these solutions across hundreds of web
+applications serving billions of users. Since then, much of my work has focused
+on taking the lessons from these efforts and sharing them with the wider
+open-source JavaScript community through conference talks, technical writing,
+and participation in industry-wide consortiums.
 
 Previously, I worked on product teams on Google Workspace and Google Cloud.
 Prior to Google, I worked on Windows UI frameworks and their debugging tooling

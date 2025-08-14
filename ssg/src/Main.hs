@@ -13,7 +13,7 @@ import Data.Time.LocalTime (getCurrentTimeZone, utcToLocalTime)
 import GhcVersionResolver (ghcVersionContext)
 import Hakyll
 import qualified StrictCsp
-import System.FilePath (takeFileName, (</>))
+import System.FilePath (takeBaseName, takeFileName, (</>))
 import Text.Pandoc
   ( Extension (Ext_fenced_code_attributes, Ext_footnotes, Ext_gfm_auto_identifiers, Ext_implicit_header_references, Ext_smart),
     Extensions,
@@ -101,14 +101,10 @@ main = do
       compile compressCssCompiler
 
     match (fromList ["work.md", "music.md", "projects.md"]) $ do
-      route $ setExtension "html"
+      route $ customRoute $ \ident ->
+        takeBaseName (toFilePath ident) </> "index.html"
       compile $ do
-        let ctx =
-              constField "siteName" mySiteName
-                <> constField "root" mySiteRoot
-                <> copyrightCtx
-                <> ghcVersionContext
-                <> defaultContext
+        let ctx = siteContext
         pandocCompilerCustom
           >>= loadAndApplyTemplate "templates/default.html" ctx
           >>= applyDefaultCsp
@@ -123,33 +119,6 @@ main = do
           >>= saveSnapshot "content"
           >>= loadAndApplyTemplate "templates/default.html" ctx
           >>= applyDefaultCsp
-
-    -- Helper function encapsulating the common logic for index-like pages
-    let buildIndexLikePage ::
-          ([Item String] -> [Item String]) -> -- Function to select posts
-          Compiler (Item String) -- Resulting compiler action
-        buildIndexLikePage selectPosts = do
-          -- Load and sort all posts
-          allPostsSorted <- recentFirst =<< loadAll "posts/*"
-          -- Apply the selection function
-          let postsToUse = selectPosts allPostsSorted
-
-          -- Define the context using the selected posts
-          -- It can access postCtx, mySiteRoot, etc. from the outer scope
-          let ctx =
-                listField "posts" postCtx (return postsToUse)
-                  <> constField "root" mySiteRoot
-                  <> constField "feedTitle" myFeedTitle
-                  <> constField "siteName" mySiteName
-                  <> copyrightCtx
-                  <> ghcVersionContext
-                  <> defaultContext
-
-          -- Run the common compilation pipeline
-          getResourceBody
-            >>= applyAsTemplate ctx
-            >>= loadAndApplyTemplate "templates/default.html" ctx
-            >>= applyDefaultCsp
 
     match "index.html" $ do
       route idRoute
@@ -189,13 +158,36 @@ main = do
       route idRoute
       compile (makeStyle pandocHighlightStyle)
 
+-- | A helper function to build pages that list posts, like the homepage or archive page.
+-- It takes a function that selects a subset of posts to display.
+buildIndexLikePage ::
+  ([Item String] -> [Item String]) -> -- Function to select posts
+  Compiler (Item String) -- Resulting compiler action
+buildIndexLikePage selectPosts = do
+  -- Load and sort all posts
+  allPostsSorted <- recentFirst =<< loadAll "posts/*"
+  -- Apply the selection function
+  let postsToUse = selectPosts allPostsSorted
+
+  -- Define the context using the selected posts
+  let ctx =
+        listField "posts" postCtx (return postsToUse) <> siteContext
+
+  -- Run the common compilation pipeline
+  getResourceBody
+    >>= applyAsTemplate ctx
+    >>= loadAndApplyTemplate "templates/default.html" ctx
+    >>= applyDefaultCsp
+
 --------------------------------------------------------------------------------
 -- COMPILER HELPERS
 
+-- | Creates a CSS item from a Pandoc style, and compresses it.
 makeStyle :: Style -> Compiler (Item String)
 makeStyle =
   makeItem . compressCss . styleToCss
 
+-- | A helper to apply a Text transformation to an Item's body.
 applyHtmlTextTransform :: (T.Text -> T.Text) -> Item String -> Compiler (Item String)
 applyHtmlTextTransform textTransform item =
   return $ fmap (T.unpack . textTransform . T.pack) item
@@ -208,12 +200,14 @@ cspSettings =
       enableUnsafeEval = False
     }
 
+-- | Applies a strict Content-Security-Policy to an HTML item.
 applyDefaultCsp :: Item String -> Compiler (Item String)
 applyDefaultCsp = applyHtmlTextTransform (StrictCsp.applyStrictCsp cspSettings)
 
 --------------------------------------------------------------------------------
 -- CONTEXT
 
+-- | The context for feed entries. Used for RSS and Atom feeds.
 feedCtx :: Context String
 feedCtx =
   titleCtx
@@ -222,16 +216,31 @@ feedCtx =
 
 postCtx :: Context String
 postCtx =
-  constField "root" mySiteRoot
-    <> constField "feedTitle" myFeedTitle
-    <> constField "siteName" mySiteName
-    <> field "description" (fmap (fromMaybe "" . lookupString "description") . getMetadata . itemIdentifier)
-    <> dateField "date" "%d %b %Y"
+  dateField "date" "%d %b %Y"
     <> dateField "datetime" (iso8601DateFormat Nothing)
+    <> siteContext
+
+-- | Fields that are required by the default.html template.
+--   These are expected to be present in the metadata of each page.
+--   This context provides fallback values to prevent build failures.
+requiredDefaultFieldsCtx :: Context String
+requiredDefaultFieldsCtx =
+  field "title" (fmap (fromMaybe "Untitled" . lookupString "title") . getMetadata . itemIdentifier)
+    <> field "description" (fmap (fromMaybe "No description provided." . lookupString "description") . getMetadata . itemIdentifier)
+    <> field "lang" (fmap (fromMaybe "en-us" . lookupString "lang") . getMetadata . itemIdentifier)
+
+-- | Context with site-wide variables for the default template.
+siteContext :: Context String
+siteContext =
+  constField "siteName" mySiteName
+    <> constField "feedTitle" myFeedTitle
+    <> constField "root" mySiteRoot
+    <> requiredDefaultFieldsCtx
     <> copyrightCtx
     <> ghcVersionContext
     <> defaultContext
 
+-- | Context for the page title. Handles HTML ampersand encoding.
 titleCtx :: Context String
 titleCtx =
   field "title" updatedTitle
@@ -274,6 +283,7 @@ updatedTitle =
 --------------------------------------------------------------------------------
 -- PANDOC
 
+-- | A custom Pandoc compiler that uses our specific extensions and options.
 pandocCompilerCustom :: Compiler (Item String)
 pandocCompilerCustom =
   pandocCompilerWith pandocReaderOpts pandocWriterOpts
@@ -309,12 +319,14 @@ pandocHighlightStyle =
 --------------------------------------------------------------------------------
 -- FEEDS
 
+-- | A type alias for Hakyll's feed rendering functions.
 type FeedRenderer =
   FeedConfiguration ->
   Context String ->
   [Item String] ->
   Compiler (Item String)
 
+-- | A helper to compile a feed with a given renderer (RSS or Atom).
 feedCompiler :: FeedRenderer -> Compiler (Item String)
 feedCompiler renderer =
   renderer feedConfiguration feedCtx
@@ -334,11 +346,12 @@ feedConfiguration =
 --------------------------------------------------------------------------------
 -- CUSTOM ROUTE
 
+-- | Creates a URL-friendly slug from a page's title metadata.
 fileNameFromTitle :: Metadata -> FilePath
 fileNameFromTitle =
   T.unpack . (`T.append` ".html") . Slugger.toSlug . T.pack . safeTitle
 
--- | For posts, the generated filename is based on the title and lives under \/posts\/
+-- | Creates a route for a post based on its title, e.g., "posts/hello-world.html".
 postRoute :: Metadata -> Routes
 postRoute meta =
   let baseFilename = fileNameFromTitle meta -- e.g., "hello-world.html"
