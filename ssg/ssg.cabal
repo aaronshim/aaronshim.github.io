@@ -38,7 +38,7 @@ library
 executable hakyll-site
     import:          common-settings       
     main-is:         Main.hs
-    other-modules:   GhcVersionResolver
+    other-modules:   GhcVersionResolver, PandocCollapsible
     hs-source-dirs:  src
     build-depends:
         -- Depend on the internal library defined above (Changed)
@@ -46,6 +46,7 @@ executable hakyll-site
         -- Dependencies specific to the executable
         hakyll            >= 4.16,
         pandoc            >= 3,
+        pandoc-types,
         filepath          >= 1.0,
         slugger           >= 0.1.0.2,
         time              >= 1.12,

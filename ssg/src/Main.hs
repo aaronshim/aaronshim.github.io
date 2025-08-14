@@ -12,6 +12,7 @@ import Data.Time.Format (defaultTimeLocale, formatTime, iso8601DateFormat)
 import Data.Time.LocalTime (getCurrentTimeZone, utcToLocalTime)
 import GhcVersionResolver (ghcVersionContext)
 import Hakyll
+import PandocCollapsible (makeCollapsible)
 import qualified StrictCsp
 import System.FilePath (takeBaseName, takeFileName, (</>))
 import Text.Pandoc
@@ -52,6 +53,9 @@ myFeedRoot = mySiteRoot
 
 --------------------------------------------------------------------------------
 -- CONFIG
+
+expandedHeadingLevel :: Int
+expandedHeadingLevel = 2
 
 -- Default configuration: https://github.com/jaspervdj/hakyll/blob/cd74877d41f41c4fba27768f84255e797748a31a/lib/Hakyll/Core/Configuration.hs#L101-L125
 config :: Configuration
@@ -105,7 +109,7 @@ main = do
         takeBaseName (toFilePath ident) </> "index.html"
       compile $ do
         let ctx = siteContext
-        pandocCompilerCustom
+        collapsiblePandocCompiler expandedHeadingLevel
           >>= loadAndApplyTemplate "templates/default.html" ctx
           >>= applyDefaultCsp
 
@@ -315,6 +319,11 @@ pandocWriterOpts =
 pandocHighlightStyle :: Style
 pandocHighlightStyle =
   breezeDark -- https://hackage.haskell.org/package/pandoc/docs/Text-Pandoc-Highlighting.html
+
+collapsiblePandocCompiler :: Int -> Compiler (Item String)
+collapsiblePandocCompiler expandedLevel =
+  fmap (writePandocWith pandocWriterOpts . fmap (makeCollapsible expandedLevel)) $
+    getResourceBody >>= readPandocWith pandocReaderOpts
 
 --------------------------------------------------------------------------------
 -- FEEDS

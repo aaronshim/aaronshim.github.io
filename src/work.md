@@ -82,17 +82,17 @@ our attempts at open-sourcing tooling that we found helpful in our experience.
 
 ## Publications
 
-### Google Security Engineering Blog
-
 It's important to me that the insights we've gained from remediating hundreds of
 webapps contribute back to securing the wider JavaScript ecosystem. To that end,
 we make an effort to write about externally-applicable techniques and best
 practices.
 
-- [Enabling Trusted Types in a Complex Web Application (Google Security Engineering Blog)](https://bughunters.google.com/blog/6037890662793216/enabling-trusted-types-in-a-complex-web-application-a-case-study-of-appsheet)
+### Google Security Engineering Blog
+
+- [Enabling Trusted Types in a Complex Web Application (2024)](https://bughunters.google.com/blog/6037890662793216/enabling-trusted-types-in-a-complex-web-application-a-case-study-of-appsheet)
   -- A step-by-step recipe of how to enable Trusted Types -- a defense-in-depth
   mechanism against DOM XSS-- in a complex codebase
-- [A Deep Dive into Trusted Types Violations (Google Security Engineering Blog)](https://bughunters.google.com/blog/5850786553528320/a-deep-dive-into-js-trusted-types-violations)
+- [A Deep Dive into Trusted Types Violations (2025)](https://bughunters.google.com/blog/5850786553528320/a-deep-dive-into-js-trusted-types-violations)
   -- A deeper dive into common patterns encountered while debugging Trusted
   Types violations across a large number of webapps.
 

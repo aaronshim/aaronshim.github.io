@@ -1,0 +1,31 @@
+/* Styles for collapsible sections */
+summary {
+  cursor: pointer;
+  display: flex; /* Use flexbox for layout */
+  align-items: center; /* Vertically align items in the center */
+}
+
+/* Hide the default disclosure marker */
+summary::-webkit-details-marker {
+  display: none;
+}
+summary::marker { /* Standard way to hide marker */
+  display: none;
+}
+
+/* Add a custom marker using a pseudo-element */
+summary::before {
+  content: '▶'; /* Right-pointing triangle */
+  margin-right: 0.5em; /* Space between marker and heading */
+  transition: transform 0.2s; /* Smooth transition for rotation */
+  transform: rotate(0deg); /* Initial state: no rotation */
+}
+
+details[open] > summary::before {
+  transform: rotate(90deg); /* Rotate 90 degrees for expanded state */
+}
+
+/* Ensure the heading inside summary doesn't take full width */
+summary > * {
+  flex-grow: 1; /* Allow heading to take available space */
+}
