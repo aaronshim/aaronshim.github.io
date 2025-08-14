@@ -211,7 +211,7 @@
                
                # Test that nginx is serving our site
                server.succeed("curl -f http://localhost/ > /tmp/index.html")
-               server.succeed("grep -i 'my site name' /tmp/index.html")
+               server.succeed("grep -i 'Aaron Shim' /tmp/index.html")
                
                # Test that basic functionality works
                server.succeed("curl -f http://localhost/rss.xml")
