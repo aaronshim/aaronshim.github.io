@@ -1,0 +1,25 @@
+{
+  "name": "Nix Environment",
+  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "features": {
+    "ghcr.io/devcontainers/features/nix:1": {
+      "extraNixConfig": "experimental-features = nix-command flakes"
+    }
+  },
+  "postCreateCommand": "nix develop --command echo 'Nix dependencies cached'",
+  "extensions": [
+    "jnoortheen.nix-ide"
+  ],
+  "terminal.integrated.defaultProfile.linux": "nix-develop",
+  "terminal.integrated.profiles.linux": {
+    "nix-develop": {
+      "path": "nix",
+      "args": [
+        "develop",
+        "--command",
+        "bash"
+      ],
+      "icon": "terminal-nix"
+    }
+  }
+}
