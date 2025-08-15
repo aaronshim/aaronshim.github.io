@@ -19,8 +19,8 @@ module GhcVersionResolver
   ) where
 
 import Control.Exception (try, SomeException)
-import Data.Aeson (FromJSON(..), (.:), withObject, eitherDecode)
-import qualified Data.ByteString.Lazy as L
+import Data.Aeson (FromJSON(..), (.:), withObject)
+
 import qualified Data.Text as T
 import qualified Data.Text.Encoding as TE
 import qualified Data.Text.IO as TIO

@@ -2,7 +2,7 @@
 
 module PandocCollapsible (makeCollapsible) where
 
-import Data.List (break)
+
 import Data.Text (Text)
 import Text.Pandoc.Definition
 

@@ -4,6 +4,8 @@ description: "A summary of my professional work, talks, and publications."
 lang: "en-us"
 ---
 
+[TOC]
+
 # Work
 
 I've always been fascinated by the empowering nature of programming and its

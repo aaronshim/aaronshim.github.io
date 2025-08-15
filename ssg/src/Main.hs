@@ -12,6 +12,7 @@ import Data.Time.Format (defaultTimeLocale, formatTime, iso8601DateFormat)
 import Data.Time.LocalTime (getCurrentTimeZone, utcToLocalTime)
 import GhcVersionResolver (ghcVersionContext)
 import Hakyll
+import PandocToc (insertToc)
 import PandocCollapsible (makeCollapsible)
 import qualified StrictCsp
 import System.FilePath (takeBaseName, takeFileName, (</>))
@@ -322,7 +323,7 @@ pandocHighlightStyle =
 
 collapsiblePandocCompiler :: Int -> Compiler (Item String)
 collapsiblePandocCompiler expandedLevel =
-  fmap (writePandocWith pandocWriterOpts . fmap (makeCollapsible expandedLevel)) $
+  fmap (writePandocWith pandocWriterOpts . fmap (makeCollapsible expandedLevel . insertToc)) $
     getResourceBody >>= readPandocWith pandocReaderOpts
 
 --------------------------------------------------------------------------------
