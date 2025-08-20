@@ -10,7 +10,9 @@ lang: "en-us"
 
 I've always been fascinated by the empowering nature of programming and its
 tools. I love creating the right building blocks that help more people
-experience the joy of building whatever they can imagine.
+experience the joy of building whatever they can imagine—especially as AI opens
+development to millions of new creators who need systems where correctness is
+obvious and security is the default.
 
 I currently work at Google in the
 [Security Engineering](https://bughunters.google.com/) organization, where my

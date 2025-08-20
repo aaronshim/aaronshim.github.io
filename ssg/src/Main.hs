@@ -93,9 +93,10 @@ main = do
         "favicon.ico",
         "robots.txt",
         "_config.yml",
-        "images/*",
-        "js/*",
-        "fonts/*"
+        "images/**",
+        "js/**",
+        "fonts/**",
+        "assets/**"
       ]
       $ \f -> match f $ do
         route idRoute
