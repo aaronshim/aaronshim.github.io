@@ -20,73 +20,60 @@ cv:
         date:
         start_date: 2020-01
         end_date: present
-        location: New York, NY, USA
+        location: New York, NY
         summary:
         highlights:
+          - "Led [Trusted Types](https://web.dev/articles/trusted-types) rollout
+            across Google's web ecosystem of 600+ domains and 900+ applications
+            serving 1 trillion+ requests, re-architecting core frameworks to
+            eliminate [DOM Cross-Site Scripting
+            (XSS)](https://portswigger.net/web-security/cross-site-scripting/dom-based)—part
+            of the XSS class that comprised **50%+ of reported web
+            vulnerabilities**—from applications with enforcement enabled"
+          - "Identified opportunity to scale Google's security innovations to
+            Angular ecosystem, leading the partnership and implementing custom
+            HTML parser that ships [auto-generated Content Security
+            Policy](https://blog.angular.dev/meet-angular-v19-7b29dfd05b84)
+            defenses in Angular v19 to **3M+ weekly downloads**, establishing
+            new industry security standard"
           - "Drove industry-wide web security guidance as Google's
             representative to [W3C](https://www.w3.org/community/swag/) Secure
             Web Application Guidelines Community Group, translating Google-scale
             security methodologies into best practices adopted across the web"
-          - "Led the rollout of [Trusted
-            Types](https://web.dev/articles/trusted-types) across Google,
-            re-architecting and overhauling internal frameworks and NPM
-            libraries to scale to thousands of applications, verifiably
-            eliminating [DOM Cross-Site Scripting
-            (XSS)](https://portswigger.net/web-security/cross-site-scripting/dom-based)
-            vulnerabilities"
           - "Formulated open-source strategy to externalize battle-tested
             security frameworks through tooling, documentation, and advocacy,
             enabling secure-by-default development for millions of developers
             beyond Google
             ([blogpost](https://bughunters.google.com/blog/6037890662793216/enabling-trusted-types-in-a-complex-web-application-a-case-study-of-appsheet))"
-          - "Built strategic partnerships with framework teams, including
-            implementing custom HTML parser and transformation layer in
-            Angular's build pipeline to ship [auto-generated Content Security
-            Policy](https://blog.angular.dev/meet-angular-v19-7b29dfd05b84)
-            defenses in Angular v19"
-          - "Established team's thought leadership program by mentoring
-            colleagues to publish [technical
-            blogposts](https://bughunters.google.com/blog/5850786553528320/a-deep-dive-into-js-trusted-types-violations)
-            and deliver [conference
+          - "Founded and scaled team's external engagement program, mentoring
+            **4 first-time blogpost authors** to publish [technical
+            content](https://bughunters.google.com/blog/5850786553528320/a-deep-dive-into-js-trusted-types-violations)
+            and **5 first-time speakers** to deliver [conference
             talks](https://x.com/liberty_js/status/1712846893628191081) at
-            security and developer venues, bridging siloed communities to drive
-            secure-by-default adoption"
+            security and developer venues, transforming internal expertise into
+            industry thought leadership that drives secure-by-default adoption"
       - company: Google
-        position: Software Engineer (Google Cloud Platform)
+        position: Software Engineer (Google Cloud Platform & Workspace)
         date:
-        start_date: 2018-11
+        start_date: 2017-12
         end_date: 2020-01
-        location: New York, NY, USA
+        location: New York, NY
         summary:
         highlights:
           - "Launched [Access Transparency for Google
             Workspace](https://workspaceupdates.googleblog.com/2019/04/access-transparency-cloud-data-security-trust.html),
-            delivering visibility into administrative data access for enterprise
-            customers while owning product quality metrics critical to launch
-            readiness and customer trust"
-          - "Designed and implemented end-to-end validation framework spanning
-            tens of products, then led multi-team incident response when
-            framework detected critical production failure, preventing customer
-            impact"
-          - "Mentored intern through design and implementation of
-            customer-facing audit log improvements"
-      - company: Google
-        position: Software Engineer (Google Workspace)
-        date:
-        start_date: 2017-12
-        end_date: 2018-11
-        location: New York, NY, USA
-        summary:
-        highlights:
+            delivering enterprise data access visibility while owning product
+            quality metrics critical to launch readiness, protecting billions of
+            users"
           - "Deployed [Strict Content Security
-            Policy](https://web.dev/articles/strict-csp) across flagship Google
-            Workspace products, mitigating critical XSS attack vectors and
-            protecting billions of users from client-side injection
-            vulnerabilities"
-          - "Led security reviews and threat modeling for new Workspace
-            features, identifying critical vulnerabilities pre-launch and
-            designing mitigation strategies that prevented security incidents in
-            production"
+            Policy](https://web.dev/articles/strict-csp) across Workspace
+            products and designed validation framework spanning dozens of
+            products, mitigating XSS vectors and preventing critical production
+            failures"
+          - Led security reviews, threat modeling, and multi-team incident
+            response for new features across Workspace and Cloud products, while
+            guiding intern's end-to-end delivery of customer-facing UI feature
+            from  design to production
       - company: Microsoft
         position: Software Development Engineer (DevDiv)
         date:
@@ -108,7 +95,7 @@ cv:
       #   summary:
       #   highlights:
       #     - "Developed key features for the iOS client of [Work Folders](https://learn.microsoft.com/en-us/windows-server/storage/work-folders/work-folders-overview), focusing on sync logic and authentication flows"
-    "talks & publications":
+    "talks":
       - title:
           "Securing Frontends at Scale: Paving our Way to the Post XSS World"
         authors:
