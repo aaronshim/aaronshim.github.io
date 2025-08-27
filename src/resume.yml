@@ -23,35 +23,39 @@ cv:
         location: New York, NY
         summary:
         highlights:
-          - "Led [Trusted Types](https://web.dev/articles/trusted-types) rollout
-            across Google's web ecosystem of 600+ domains and 900+ applications
-            serving 1 trillion+ requests, re-architecting core frameworks to
-            eliminate [DOM Cross-Site Scripting
-            (XSS)](https://portswigger.net/web-security/cross-site-scripting/dom-based)—part
-            of the XSS class that comprised **50%+ of reported web
-            vulnerabilities**—from applications with enforcement enabled"
+          - "Led organization-wide [Trusted
+            Types](https://web.dev/articles/trusted-types)  rollout across
+            Google's web ecosystem of 600+ domains and 900+ applications serving
+            1 trillion+ requests—**earning two Google-wide awards**—mentoring 5
+            engineers through framework re-architecture that eliminated [DOM
+            Cross-Site Scripting
+            (XSS)](https://portswigger.net/web-security/cross-site-scripting/dom-based)
+            in enforced applications, part of the broader XSS vulnerability
+            class that comprised **50%+ of web bug bounty reports**"
           - "Identified opportunity to scale Google's security innovations to
             Angular ecosystem, leading the partnership and implementing custom
             HTML parser that ships [auto-generated Content Security
             Policy](https://blog.angular.dev/meet-angular-v19-7b29dfd05b84)
             defenses in Angular v19 to **3M+ weekly downloads**, establishing
             new industry security standard"
-          - "Drove industry-wide web security guidance as Google's
-            representative to [W3C](https://www.w3.org/community/swag/) Secure
-            Web Application Guidelines Community Group, translating Google-scale
-            security methodologies into best practices adopted across the web"
-          - "Formulated open-source strategy to externalize battle-tested
-            security frameworks through tooling, documentation, and advocacy,
-            enabling secure-by-default development for millions of developers
-            beyond Google
+          - "Established Google's participation in
+            [W3C](https://www.w3.org/community/swag/) Secure Web Application
+            Guidelines Community Group after identifying influence gap,
+            translating Google methodologies into security guidelines adopted
+            across the industry"
+          - "Architected open-source strategy translating Google's security
+            learnings into public methodologies and tools with **500k+ weekly
+            NPM downloads**, establishing industry standards for
+            secure-by-default development
             ([blogpost](https://bughunters.google.com/blog/6037890662793216/enabling-trusted-types-in-a-complex-web-application-a-case-study-of-appsheet))"
-          - "Founded and scaled team's external engagement program, mentoring
-            **4 first-time blogpost authors** to publish [technical
-            content](https://bughunters.google.com/blog/5850786553528320/a-deep-dive-into-js-trusted-types-violations)
-            and **5 first-time speakers** to deliver [conference
-            talks](https://x.com/liberty_js/status/1712846893628191081) at
-            security and developer venues, transforming internal expertise into
-            industry thought leadership that drives secure-by-default adoption"
+          - "Built advocacy pipeline transforming team from internal-only to
+            external-facing thought leaders, developing **4 first-time authors**
+            ([example
+            blogpost](https://bughunters.google.com/blog/5850786553528320/a-deep-dive-into-js-trusted-types-violations))
+            and **5 speakers** ([example
+            talk](https://x.com/liberty_js/status/1712846893628191081)),
+            positioning Google Security Engineering as an accessible leader
+            driving secure-by-default adoption"
       - company: Google
         position: Software Engineer (Google Cloud Platform & Workspace)
         date:
