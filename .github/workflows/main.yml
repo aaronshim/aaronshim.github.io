@@ -50,7 +50,7 @@ jobs:
       # --- Generate SLSA Attestation ---
       # Attests to the creation of the ./result/dist directory contents
       - name: Generate SLSA Attestation
-        uses: actions/attest-build-provenance@v2
+        uses: actions/attest-build-provenance@v3
         with:
           subject-path: ./result/dist # Path to the built website artifact
 
